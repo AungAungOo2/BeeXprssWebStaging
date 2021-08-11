@@ -27,7 +27,26 @@ export function FroMeHistoryList(){
         }
     }
     const createText = (item:FromMeList):string =>{
-        return item.current_status.name.split('] ')[1] == "Delivered" ? "Received "+ item.cod_amount+" MMK from "+item.name+"." : "To receive "+ item.cod_amount+" MMK from "+item.name+"."
+        var amount = 0
+        switch(item.payment_type_id.name) { 
+            case "Sender Pay": { 
+                amount = item.cod_amount
+               break; 
+            } 
+            case "Receiver Pay": { 
+                amount = item.cod_amount 
+               break; 
+            } 
+            case "Special Service": { 
+                amount = item.cod_amount - ( item.delivery_charges + item.other_cost )
+                break; 
+             } 
+            default: { 
+                amount = item.cod_amount
+               break; 
+            } 
+         } 
+        return item.current_status.name.split('] ')[1] == "Delivered" ? "Received " + amount +" MMK for "+item.name+"." : "To receive " + amount+" MMK for "+item.name+"."
     }
 
     const RenderItemList = () =>{

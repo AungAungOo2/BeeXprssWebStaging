@@ -270,8 +270,11 @@ export function Tome() {
                 "COD Amount": row.cod_amount,
                 "Delivery Charges": row.delivery_charges,
                 "Other Cost": row.other_cost,
-                "To Pay": row.payment_type_id.name == "Receiver Pay" ? row.delivery_charges + row.cod_amount : row.cod_amount,
+                "To Pay": row.payment_type_id.name == "Receiver Pay" ? row.delivery_charges + row.cod_amount + row.other_cost: row.cod_amount,
                 "Goods Weight(kg)": row.weight,
+                "Remark": row.remark,
+                "Description": row.description,
+                "Created Date": row.awb_created_date,
                 "Deliverd Date": row.delivered_time,
                 "Status": row.current_status.name.split("]")[1],
             })
@@ -286,6 +289,7 @@ export function Tome() {
                 searchType="tome"
                 openFilter = {openFilter}
                 title = "Filter To Me"
+                information = "Sender Information"
                 filterFromDate = {filterFromDate}
                 onChangeFromDate = { (e) => setFilterFromDate(e.target.value)}
                 filterToDate = {filterToDate}

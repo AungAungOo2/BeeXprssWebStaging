@@ -43,6 +43,7 @@ export function AWBDetails(props:any){
                     delivery_charges={FromMeList.delivery_charges}
                     other_cost={FromMeList.other_cost}
                     to_pay={FromMeList.cash_by_last_mile} 
+                    payment_type_id={FromMeList.payment_type_id}
                     extra={true}
                 />
                 <GoodsContainer description={FromMeList.description} remark={FromMeList.remark} weight={FromMeList.weight} />

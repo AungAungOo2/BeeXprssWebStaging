@@ -187,6 +187,7 @@ export function OrderList() {
     const handlePrint = () => {
         if(items.filter( row => row.selected == true ).length > 0) {
             let selectedRows = items.filter( row => row.selected == true )
+            console.log("selectedRows : ", selectedRows)
             dispatch({ OrderList: selectedRows })
             history.push("/home/fromme/PrintOrder")
         } 
@@ -221,13 +222,13 @@ export function OrderList() {
 
             <Grid container spacing={0}>
                 <Grid item xs={2}>
-                        <Checkbox value={selectAll}
+                    { items.length > 0 && <Checkbox value={selectAll}
                         onChange={(event) => {
                             event.stopPropagation()
                             onSelectAll()
                         }}
                         style={{ width: 50, height: 50 }}
-                    />
+                    /> } 
                 </Grid>
 
                 

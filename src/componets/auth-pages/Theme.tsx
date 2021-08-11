@@ -206,8 +206,8 @@ export default function MiniDrawer() {
               window.location.pathname == "/home/fromme" &&
               <Box display="flex" flexDirection="row">
                 <MenuButton icon={IconKeys.quote} name="Check Price" onClick={() => history.push("/home/fromme/quote")} />
-                <MenuButton icon={IconKeys.add} name="Draft AWB Form" onClick={() => history.push("/home/fromme/add")} />
-                <MenuButton icon={IconKeys.pickup} name="Pickup Form" onClick={() => history.push("/home/fromme/pickup")} />
+                <MenuButton icon={IconKeys.add} name="Create Draft AWB" onClick={() => history.push("/home/fromme/add")} />
+                <MenuButton icon={IconKeys.pickup} name="Request Pickup" onClick={() => history.push("/home/fromme/pickup")} />
               </Box>
             }
             {

@@ -65,7 +65,6 @@ export function ScrollListener(props: actinProps) {
         setLoadingStatus(true)
         props.cb(page)
             .then(itemCounts => {
-                console.log("itemCounts : ", itemCounts)
                 if (itemCounts == 0) setStop(true)
                 if (itemCounts > 0) setPage(page + 1)
             })

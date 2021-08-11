@@ -126,8 +126,9 @@ export function CostContainer(props:ToMeList){
                     <Typography color={"secondary"}>To Pay</Typography>
                     <Typography color={"secondary"} style={{fontWeight:"bold"}}>
                         { props.payment_type_id.name == "Receiver Pay" ? 
-                          props.delivery_charges + props.cod_amount : props.cod_amount
-                        } MMK</Typography>
+                          props.delivery_charges + props.cod_amount + props.other_cost : props.cod_amount
+                        } MMK
+                    </Typography>
                 </Box>
             </Box>
         </Paper>

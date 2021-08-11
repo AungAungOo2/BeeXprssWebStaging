@@ -2,7 +2,7 @@ import * as React from "react";
 import { IconKeys, Icons } from "../Icon";
 import { IconColor,Colors } from "../../res/color";
 import { makeStyles, Theme, createStyles, Button } from "@material-ui/core";
-import { MagicSpinner,JellyfishSpinner } from "react-spinners-kit";
+import { MagicSpinner,JellyfishSpinner, RotateSpinner } from "react-spinners-kit";
 
 type parms = {
   icon : IconKeys,
@@ -30,7 +30,7 @@ export function CustomizedButton(props:parms) {
     const classes = useStyles();
 
     let icon = <Icons name={props.icon} color={props.color} />
-    if(props.loading) icon = <MagicSpinner size={30} color={Colors.THEME_SECONDARY} loading={true} />
+    if(props.loading) icon = <RotateSpinner size={25} color={Colors.THEME_SECONDARY} loading={true} />
 
     return (
         <Button

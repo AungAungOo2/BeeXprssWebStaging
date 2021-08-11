@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { FormContainer, AppContainer, LeftContainer, RightContainer } from '../../Standard UI/container/Container'
-import { TableContainer, Table, TableRow, TableHead, TableCell, TableBody, Paper, makeStyles, Grid, Typography, Divider, ThemeProvider, Link, Button } from '@material-ui/core'
+import { TableContainer, Table, TableRow, TableHead, TableCell, TableBody, Paper, makeStyles, Grid, Typography, Divider, ThemeProvider, Link, Button, Chip, Avatar } from '@material-ui/core'
 import { CustomizedPaper } from '../../Standard UI/paper/CustomizedPaper';
 import { Colors } from '../../res/color';
 import { getCustomerStatement } from '../../../lib/api';
@@ -17,6 +17,12 @@ import { CreditNoteProps } from '../../../lib/types/creaditNote.types';
 import { tabletheme } from './statement.style';
 import * as moment from 'moment'
 import { ScrollListener } from '../../listener/ScrollListen'
+import { StatementsFilter, StatementsFilterBar } from '../../Standard UI/filter/statementFilter';
+
+export interface ChipObject { 
+    key : string, 
+    value : string
+}
 
 const useStyles  = makeStyles({
     table: {
@@ -28,6 +34,14 @@ const useStyles  = makeStyles({
 export function Statement() {
     const [statement,setStatement] = React.useState<Array<StatementProps>>([])
     const [total,setTotal] = React.useState<String>()
+    const [filterItems, setFilterItems] = React.useState<Array<StatementProps>>([])
+    const currentDate = moment().format('YYYY-MM-DD')
+    const [filterFromDate, setFilterFromDate] = React.useState<string | Date>(currentDate)
+    const [filterToDate, setFilterToDate] = React.useState<string | Date>(currentDate)
+    const [chipList, setChipList] = React.useState<Array<ChipObject>>([])
+    const [filterMood, setFilterMood] = React.useState<boolean>(false)
+    const [loading, setLoading] = React.useState(false)
+    const [openFilter, setOpenFilter] = React.useState(false)
 
     const apiCall = async (page = 0) =>{
         try {
@@ -39,6 +53,23 @@ export function Statement() {
         } catch (error) {
            alert(error.message)
         }
+    }
+
+    const apiFilterCall = async (page = 0) => {
+        // console.log(getRequestData())
+        // try {
+        //     const results = await fromMeFilter(getRequestData(), page + 1)
+        
+        //     if (results.links.item_per_page > 0 ) {
+        //         setFilterItems( prev => ([...prev, ...results.result]))
+        //         setFilterItemTotalCount(results.links.item_count)
+        //     }
+        //     return Promise.resolve(results.result.length)
+        // } catch (error) {
+        //     return Promise.reject()
+        // } finally {
+        //     setFilterOneTimeCall(true)
+        // }
     }
 
     function getTotal(datas : Array<StatementProps>){
@@ -60,11 +91,73 @@ export function Statement() {
         apiCall()
     },[])
 
+    const _onFilter = async () => {
+        setFilterMood(true)
+        await setFilterItems( prev => ([]) )
+        await setOpenFilter(false)
+        await setChipList([])
+        
+        var list : ChipObject[] = []
+        if (filterFromDate != "" && filterToDate != "") list.push({ key: "date", value: filterFromDate + " to " + filterToDate })
+
+        setChipList(list)
+        apiFilterCall()
+    }
+
+    const _onOpenDialog = () => {
+        //if (items.length == 0) return
+        setOpenFilter(true)
+    }
+
+    const _onCloseDialog = () => {
+        setOpenFilter(false)
+    }
+
+    const renderChipList = () => {
+        let list: Array<JSX.Element> = []
+        chipList.map((row, index) => {
+            list.push(
+                <Chip label={row.value}
+                    color="primary"
+                    style={{ paddingRight: 8, margin: 4 }}
+                    avatar={<Avatar> <Icons name={IconKeys.CheckCircle} size={30} /> </Avatar>}
+                />
+            )
+        })
+        return list
+    }
+
+    const clearFilter = () => {
+        setFilterMood(false)
+        setChipList([])
+        setFilterItems([])
+        window.location.reload();
+    }
+
 
     return (
         <AppContainer>
             <LeftContainer>
-                <CustomizedPaper title="Customer Statement">
+                {/* <CustomizedPaper title="Customer Statement"> */}
+               
+                <CustomizedPaper>
+                    <StatementsFilter 
+                        openFilter = {openFilter}
+                        title = "Filter Statement"
+                        filterFromDate = {filterFromDate}
+                        onChangeFromDate = { (e) => setFilterFromDate(e.target.value) }
+                        filterToDate = {filterToDate}
+                        onChangeToDate = { (e) => setFilterToDate(e.target.value) }
+                        onCloseDialog = { () => _onCloseDialog() }
+                        onFilter = { () => _onFilter() }/>
+
+                    <StatementsFilterBar 
+                        renderChipList = { () => renderChipList()} 
+                        filterMood = {filterMood}
+                        clearFilter={ () => clearFilter()}
+                        onOpenDialog={ () => _onOpenDialog()}
+                        loading = {loading}/>
+
                     <Table>
                         <TableBody>
                             <ScrollListener cb={page => apiCall(page)}>

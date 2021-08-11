@@ -2,7 +2,7 @@ import * as React from 'react'
 import { FormContainer, AppContainer, LeftContainer, RightContainer } from '../../Standard UI/container/Container'
 import { TableContainer, Table, TableRow, TableHead, TableCell, TableBody, Paper, makeStyles, Grid, Typography, Divider, ThemeProvider, Link, Button } from '@material-ui/core'
 import { CustomizedPaper } from '../../Standard UI/paper/CustomizedPaper';
-import { Colors } from '../../res/color';
+import { Colors, IconColor } from '../../res/color';
 import { createDraftAwbList, getDeliveryChargesList } from '../../../lib/api';
 import { CustomizedLinkButton, CustomizedButton } from '../../Standard UI/button/CustomizedButton';
 import { Icons, IconKeys } from '../../Standard UI/Icon';
@@ -29,6 +29,9 @@ export function ImportOrder(props: any) {
 
     const [state, dispatch] = React.useContext(frommeContext)
     const [unableCreate, setUnableCreate] = React.useState(false)
+    const [unableCalculate, setUnableCalculate] = React.useState(true)
+    const [loadingCreate, setLoadingCreate] = React.useState(false)
+    const [loadingCalculate, setLoadingCalculate] = React.useState(false)
 
     React.useEffect(() => {
         if (!state || !state.ImportOrder) history.push("/home/fromme")
@@ -82,7 +85,7 @@ export function ImportOrder(props: any) {
     }
 
     const _onCalculateDeliveryCharges = async () => {
-        console.log("ImportOrder : ", ImportOrder)
+        setLoadingCalculate(true)
         let isValid = true
         const result = await getDeliveryChargesList(ImportOrder)
 
@@ -107,30 +110,75 @@ export function ImportOrder(props: any) {
 
             })
             dispatch({ ImportOrder })
-            if (isValid) setUnableCreate(true)
+            if (isValid){
+                setUnableCreate(true)
+                setUnableCalculate(false)
+            } 
         }
+        setLoadingCalculate(false)
     }
 
     const _onCreateDraftAwb = async () => {
-        // const result = await createDraftAwbList(ImportOrder)
-        // if (result) {
-        //     result.map(row => {
+        console.log("ImportOrder : ", ImportOrder)
+        setLoadingCreate(true)
+        var failedCount = 0
+        const result = await createDraftAwbList(ImportOrder)
+        console.log("result : ", result)
+        if (result) {
+            if(result.error){
+                alert(result.error.message)
+            }else if(result.temp_awb_data){
+                result.temp_awb_data.map(row => {
+                    console.log("row : ", row)
+                    if(!row.success) {
+                        failedCount = failedCount + 1
+                        ImportOrder.filter(order => order.id == row.id).map((row) => {
+                            row.valid = "invalid"
+                        })
+                    }
+                })
+            }
+        }
 
-        //     })
-        // }
+        setLoadingCreate(false)
+        setUnableCreate(false)
 
-        alert("Draft Awb Successfully Created")
-        history.push("/home/fromme")
+        if(failedCount == 0) {
+            alert("All draft Awbs Successfully Created")
+            history.push("/home/fromme")
+        }else {
+            alert( "Failed to create " + failedCount + " records")
+        }        
     }
 
     return (
         <FormContainer>
-            {!unableCreate && <Button color="primary" style={{ textTransform: "none"}} variant="contained" component="label" onClick={() => _onCalculateDeliveryCharges()}>
+            {/* {!unableCreate && <Button color="primary" style={{ textTransform: "none"}} variant="contained" component="label" onClick={() => _onCalculateDeliveryCharges()}>
                 Calculate Delivery Charges
             </Button>}
             {unableCreate && <Button color="primary" style={{ textTransform: "none"}} variant="contained" component="label" onClick={() => _onCreateDraftAwb()}>
                 Create Draft AWB
-            </Button>}
+            </Button>} */}
+
+            {unableCalculate && <CustomizedButton 
+                onClick={() => _onCalculateDeliveryCharges()}
+                containerStyle={{paddingLeft:"40px",paddingRight:"40px"}}
+                color={IconColor.DARK_GREY}
+                label="Calculate Delivery Charges" 
+                icon={IconKeys.quote}
+                buttonColor={Colors.THEME_PRIMARY} 
+                loading={loadingCalculate} 
+            />}
+            {unableCreate && <CustomizedButton 
+                onClick={() => _onCreateDraftAwb()}
+                containerStyle={{paddingLeft:"40px",paddingRight:"40px"}}
+                color={IconColor.DARK_GREY}
+                label="Create Draft AWB" 
+                icon={IconKeys.awb}
+                buttonColor={Colors.THEME_PRIMARY} 
+                loading={loadingCreate} 
+            /> }
+
             <TableContainer component={"div"}>
                 <Table className={classes.table} size="medium">
                     <TableHead>

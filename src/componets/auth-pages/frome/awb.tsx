@@ -266,8 +266,11 @@ export function AWBList() {
                 "COD Amount": row.cod_amount,
                 "Delivery Charges": row.delivery_charges,
                 "Other Cost": row.other_cost,
-                "To Pay": row.payment_type_id.name == "Receiver Pay" ? row.delivery_charges + row.cod_amount : row.cod_amount,
+                "To Receive": row.payment_type_id.name == "Special Service" ? row.cod_amount - (row.delivery_charges + row.other_cost)  : row.cod_amount,
                 "Goods Weight(kg)": row.weight,
+                "Remark": row.remark,
+                "Description": row.description,
+                "Created Date": row.awb_created_date,
                 "Deliverd Date": row.delivered_time,
                 "Status": row.current_status.name.split("]")[1],
             })
@@ -283,6 +286,7 @@ export function AWBList() {
                 searchType="fromme"
                 openFilter = {openFilter}
                 title = "Filter From Me"
+                information = "Receiver Information"
                 filterFromDate = {filterFromDate}
                 onChangeFromDate = { (e) => setFilterFromDate(e.target.value) }
                 filterToDate = {filterToDate}

@@ -86,6 +86,7 @@ export interface OrdersProps {
     name: string,
     current_status?: null,
     receiver_full_address?: string,
+    sender_full_address?: string,
     courier?: [],
     selected: boolean,
 }

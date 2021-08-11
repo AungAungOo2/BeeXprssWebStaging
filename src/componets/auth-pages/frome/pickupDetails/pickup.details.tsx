@@ -3,7 +3,7 @@ import { AppContainer, LeftContainer, RightContainer } from '../../../Standard U
 import { Typography, Box, Divider } from '@material-ui/core'
 import { CustomizedPaper } from '../../../Standard UI/paper/CustomizedPaper'
 import { Icons, IconKeys } from '../../../Standard UI/Icon'
-import { UserDetailsBox, TypesContainer, ChargesAndCODContainer, GoodsContainer, QrCodeContainer } from '../fromMe.ui'
+import { UserDetailsBox } from '../fromMe.ui'
 import history from '../../../history'
 import frommeContext from '../../../../context/awb.context'
 import {Text} from '../../../Standard UI/Text/Text'

@@ -52,6 +52,7 @@ API1.interceptors.request.use(config => {
 });
 
 API1.interceptors.response.use(res => {
+    console.log("res : ",res)
     if (res.config.url == EMAIL_CHECKING_URL) return res
     if (res.data.error) throw new Error("Odoo Server Error")
     if (res.data.result.error) throw new Error(res.data.result.error || "Server error")
@@ -367,10 +368,8 @@ export async function deleteDraftAwb(props: deleteDraftAwbProps) {
 export async function getDeliveryChargesList(data: ExportOrderList[]) {
     try {
         const response = await API1.post(CALCULATE_DELIVERY_CHARGES_LIST, { data })
-
         return response.data.result
     } catch (error) {
-
         return Promise.reject(error)
     }
 }

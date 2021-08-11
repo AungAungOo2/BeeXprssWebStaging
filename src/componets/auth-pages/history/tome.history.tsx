@@ -38,8 +38,8 @@ export function ToMeHistoryList(){
                 amount = item.cod_amount
                break; 
             } 
-            case "Sender Pay": { 
-                amount = item.cod_amount + item.delivery_charges
+            case "Receiver Pay": { 
+                amount = item.cod_amount + item.delivery_charges + item.other_cost
                break; 
             } 
             case "Special Service": { 

@@ -3,7 +3,7 @@ import { AppContainer, LeftContainer, RightContainer } from '../../Standard UI/c
 import { Typography, Box, Divider } from '@material-ui/core'
 import { CustomizedPaper } from '../../Standard UI/paper/CustomizedPaper'
 import { Icons, IconKeys } from '../../Standard UI/Icon'
-import { UserDetailsBox, TypesContainer, ChargesAndCODContainer, GoodsContainer, QrCodeContainer, PrintContainer } from './fromMe.ui'
+import { PrintContainer } from './fromMe.ui'
 import history from '../../history'
 import frommeContext from '../../../context/awb.context'
 import Button from '@material-ui/core/Button';
@@ -63,8 +63,8 @@ export function PrintOrder(props: any) {
 
                             <View style={{ width: "50%" }}>
                                 <Text style={[styles.fontBold, {marginBottom : 4}]}> Sender : {row.sender_id.name}</Text>
-                                <Text style={[styles.fontNormal, {marginBottom : 4}]}>{row.sender_id.name}</Text>
-                                <Text style={styles.fontNormal}>{row.sender_mobile}</Text>
+                                <Text style={[styles.fontNormal, {marginBottom : 4}]}>{row.sender_full_address}</Text>
+                                <Text style={styles.fontNormal}>Phone : {row.sender_mobile}</Text>
                             </View>
                         </View>
 
@@ -88,7 +88,7 @@ export function PrintOrder(props: any) {
                         <View style={{ backgroundColor: "grey", height : 1, marginTop: 8, marginBottom: 16}}></View>
 
                         <View style={{ marginTop: 8, marginBottom: 8 }}>
-                            <Text style={styles.fontNormal}> Consignment : {row.weight} kg; 0.0cm; 0.0cm; 0.0cm; 0.0cm3 </Text>
+                            <Text style={styles.fontNormal}> Consignment : {row.weight} kg</Text>
                             <Text style={styles.fontNormal}> Service & Payment : {row.service_type_id.name} & {row.payment_type_id.name}</Text>
                             <Text style={styles.fontNormal}> Description : {row.description} </Text>
                             <Text style={styles.fontNormal}> Remark : {row.remark} </Text>
@@ -105,7 +105,7 @@ export function PrintOrder(props: any) {
                                 <Text style={styles.fontBold}> {row.delivery_charges} </Text>
                             </View>
 
-                            <View style={{ width: "25%", textAlign: 'center', alignContent: 'center', justifyContent: 'center' }}>
+                            {/* <View style={{ width: "25%", textAlign: 'center', alignContent: 'center', justifyContent: 'center' }}>
                                 <Text style={styles.fontNormal}> Other Cost </Text>
                                 <Text style={styles.fontBold}> {row.delivery_charges} </Text>
                             </View>
@@ -113,7 +113,7 @@ export function PrintOrder(props: any) {
                             <View style={{ width: "25%", textAlign: 'center', alignContent: 'center', justifyContent: 'center' }}>
                                 <Text style={styles.fontNormal}> Cash Collect </Text>
                                 <Text style={styles.fontBold}> {row.delivery_charges} </Text>
-                            </View>
+                            </View> */}
                         </View>
 
                         <View style={{marginTop: 12}}>

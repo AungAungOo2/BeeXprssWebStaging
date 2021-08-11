@@ -19,6 +19,7 @@ type params = {
     searchType : string,
     openFilter: boolean,
     title: string,
+    information: string,
     filterFromDate: string | Date,
     onChangeFromDate: (e:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => void,
     filterToDate: string | Date,
@@ -81,7 +82,7 @@ export function AwbsFilter(props:params) {
                     <div>
                         <FormControlLabel
                             control={<Checkbox checked={props.filterReceiver} onChange={ () => props.onChangefilterReceiver() } name="checkedA" />}
-                            label="Receiver Information"
+                            label={props.information}
                         />
                     </div>
                     { props.filterReceiver &&

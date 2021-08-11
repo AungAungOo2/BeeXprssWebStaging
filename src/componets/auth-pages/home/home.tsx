@@ -110,6 +110,10 @@ export function Home(){
                history.push("/home/tracking") 
                break; 
             } 
+            case "statement": { 
+                history.push("/home/statement") 
+                break; 
+             } 
             default: { 
                break; 
             } 
@@ -163,7 +167,7 @@ export function Home(){
                             </Grid>
                             <Grid item xs={12}> 
                                 <CustomizedPaper containerStyle={styles.dashboardPrimaryItemContainer} onCLick={()=>_onClick("fromMe")}>
-                                    <HomeItems color={IconColor.THEME_SECONDARY} iconsName={IconKeys.fromMe}  label="From Me" text={dashboard?.awb_from_me}/>
+                                    <HomeItems color={IconColor.THEME_SECONDARY} iconsName={IconKeys.fromMe}  label="From Me" text={dashboard? dashboard.awb_from_me + " pcs" : ""}/>
                                 </CustomizedPaper>
                             </Grid>
                             <Grid item xs={12}> 
@@ -171,17 +175,29 @@ export function Home(){
                                     <HomeItems color={IconColor.THEME_SECONDARY} iconsName={IconKeys.pickup}  label="Pickup Order" text={dashboard?.booking}/>
                                 </CustomizedPaper>
                             </Grid>
-                            <Grid item xs={12}> 
+                            {/* <Grid item xs={12}> 
                                 <CustomizedPaper containerStyle={styles.dashboardPrimaryItemContainer} onCLick={()=>_onClick("checkPrice")}>
                                     <HomeItems color={IconColor.THEME_SECONDARY} iconsName={IconKeys.quote}  label="Check Price" text={""}/>
                                 </CustomizedPaper>
-                            </Grid>
+                            </Grid> */}
                             {/* <Grid item xs={12}> 
                                 <CustomizedPaper containerStyle={{...styles.dashboardItemContainer,...{backgroundColor:Colors.THEME_SECONDARY}}}>
                                     <HomeItems color={IconColor.THEME_PRIMARY} iconsName={IconKeys.wallet}  label="My Wallet" text="0MMK" />
                                     <HomeItems color={IconColor.THEME_PRIMARY} iconsName={IconKeys.myPoints}  label="My Points" text={0}/>
                                 </CustomizedPaper>
                             </Grid> */}
+                            <Grid container>
+                                <Grid item xs={6}> 
+                                    <CustomizedPaper containerStyle={styles.dashboardPrimaryItemContainer} onCLick={()=>_onClick("checkPrice")}>
+                                        <HomeItems color={IconColor.THEME_SECONDARY} iconsName={IconKeys.quote}  label="Check Price" text=""/>
+                                    </CustomizedPaper>
+                                </Grid>
+                                <Grid item xs={6}> 
+                                <CustomizedPaper containerStyle={styles.dashboardPrimaryItemContainer} onCLick={()=>_onClick("track")}>
+                                    <HomeItems color={IconColor.THEME_SECONDARY} iconsName={IconKeys.tracking}  label="Track Shipment" text={""}/>
+                                </CustomizedPaper>
+                            </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                     <Grid item xs={5}>
@@ -198,17 +214,17 @@ export function Home(){
                             </Grid>
                             <Grid item xs={11}> 
                                 <CustomizedPaper containerStyle={styles.dashboardPrimaryItemContainer} onCLick={()=>_onClick("toMe")}>
-                                    <HomeItems color={IconColor.THEME_SECONDARY} iconsName={IconKeys.toMe}  label="To Me" text={dashboard?.awb_to_me}/>
+                                    <HomeItems color={IconColor.THEME_SECONDARY} iconsName={IconKeys.toMe}  label="To Me" text={dashboard? dashboard.awb_to_me + " pcs" : ""}/>
                                 </CustomizedPaper>
                             </Grid>
                             <Grid item xs={11}> 
                                 <CustomizedPaper containerStyle={styles.dashboardPrimaryItemContainer} onCLick={()=>_onClick("draft")}>
-                                    <HomeItems color={IconColor.THEME_SECONDARY} iconsName={IconKeys.add}  label="Draft Shipment" text={dashboard?.temp}/>
+                                    <HomeItems color={IconColor.THEME_SECONDARY} iconsName={IconKeys.add}  label="Draft Shipment" text={dashboard? dashboard.temp + " pcs" : ""}/>
                                 </CustomizedPaper>
                             </Grid>
                             <Grid item xs={11}> 
-                                <CustomizedPaper containerStyle={styles.dashboardPrimaryItemContainer} onCLick={()=>_onClick("track")}>
-                                    <HomeItems color={IconColor.THEME_SECONDARY} iconsName={IconKeys.tracking}  label="Track Shipment" text={""}/>
+                                <CustomizedPaper containerStyle={styles.dashboardPrimaryItemContainer} onCLick={()=>_onClick("statement")}>
+                                    <HomeItems color={IconColor.THEME_SECONDARY} iconsName={IconKeys.statement}  label="COD Statement" text=""/>
                                 </CustomizedPaper>
                             </Grid>
                         </Grid>

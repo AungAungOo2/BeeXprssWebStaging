@@ -30,7 +30,6 @@ export function HistoryItem(props:ItemProps) {
                         </Grid>
                     </Grid>
                 </Box>
-
             </Box>
         </Paper>
     )

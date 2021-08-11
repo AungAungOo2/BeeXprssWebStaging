@@ -170,6 +170,7 @@ export function ChargesAndCODContainer(props: {
     other_cost?: string | number,
     to_pay?: string | number,
     extra?: boolean
+    payment_type_id? : { id: number, name: string },
 }) {
     return (
         <Paper style={{ backgroundColor: Colors.THEME_PRIMARY }}>
@@ -191,7 +192,10 @@ export function ChargesAndCODContainer(props: {
                     </Box>
                     <Box display="flex" flexGrow={1} alignItems="center" flexDirection="column" style={{ padding: 10 }}>
                         <Typography color={"secondary"}>To Receive</Typography>
-                        <Typography color={"secondary"} style={{ fontWeight: "bold" }}>{props.cod_amount || 0} MMK</Typography>
+                        <Typography color={"secondary"} style={{ fontWeight: "bold" }}>
+                            { props?.payment_type_id?.name == "Special Service" ? 
+                            props.cod_amount - (props.delivery_charges + props.other_cost) : props.cod_amount } MMK
+                        </Typography>
                     </Box>
                 </Box>
                 : <span />
@@ -327,7 +331,7 @@ export function PrintContainer(props: { order: OrdersProps }) {
                 </Box>
                 <Box display="flex" flexGrow={1} flexDirection="column" style={{ padding: 10 }}>
                     <Typography style={{ fontWeight: "bold" }}> Sender : {props.order.sender_id.name} </Typography>
-                    <Typography style={{ fontWeight: "bold" }}> {props.order.sender_mobile} </Typography>
+                    <Typography style={{ fontWeight: "bold" }}> {props.order.sender_full_address} </Typography>
                     <Typography> Phone : {props.order.sender_mobile}</Typography>
                 </Box>
             </Box>
@@ -360,7 +364,7 @@ export function PrintContainer(props: { order: OrdersProps }) {
 
             <div style={{ backgroundColor: "grey", height: 1, marginLeft: 8, marginRight: 8 }}></div>
 
-            <Typography style={{ paddingLeft: 16, marginTop: 16 }}> Consignment : {props.order.weight} kg; 0.0cm; 0.0cm; 0.0cm; 0.0cm3 </Typography>
+            <Typography style={{ paddingLeft: 16, marginTop: 16 }}> Consignment : {props.order.weight} kg</Typography>
             <Typography style={{ paddingLeft: 16 }}> Service & Payment : {props.order.service_type_id.name} & {props.order.payment_type_id.name}</Typography>
             <Typography style={{ paddingLeft: 16 }}> Description : {props.order.description} </Typography>
             <Typography style={{ paddingLeft: 16 }}> Remark : {props.order.remark} </Typography>
@@ -372,12 +376,12 @@ export function PrintContainer(props: { order: OrdersProps }) {
                 <Box display="flex" flexGrow={1} flexDirection="column" alignItems="center">
                     <Typography style={{ fontWeight: "bold", alignItems: "center" }}> Delivery Charges(MMK)</Typography>
                 </Box>
-                <Box display="flex" flexGrow={1} flexDirection="column" alignItems="center" >
+                {/* <Box display="flex" flexGrow={1} flexDirection="column" alignItems="center" >
                     <Typography style={{ fontWeight: "bold", alignItems: "center" }}> Other Cost(MMK) </Typography>
                 </Box>
                 <Box display="flex" flexGrow={1} flexDirection="column" alignItems="center" >
                     <Typography style={{ fontWeight: "bold", alignItems: "center" }}> Cash Collect(MMK) </Typography>
-                </Box>
+                </Box> */}
             </Box>
 
             <Box display="flex" flexDirection="row">
