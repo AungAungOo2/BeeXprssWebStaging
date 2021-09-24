@@ -130,6 +130,13 @@ class Auth{
             return data.payment_type
         }
     }
+
+    isCreditTermCustomer = () =>{
+        const data:AuthContext = this.decrypt()
+        if(data.contact_data){
+            return data.contact_data.is_credit_term
+        }
+    }
 }
 
 

@@ -78,14 +78,13 @@ export function Tome() {
 
     const apiFilterCall = async (page = 0) => {
         try {
-            const results = await toMeFilter(getRequestData(), page + 1)
-        
-            if (results.links.item_per_page > 0 ) {
-                setFilterItems( prev => ([...prev, ...results.result]))
-                setFilterItemTotalCount(results.links.item_count)
+            const results = await toMeFilter(getRequestData(page))
+            if (results.awb_data.length > 0 ) {
+                setFilterItems( prev => ([...prev, ...results.awb_data]))
+                setFilterItemTotalCount(results.total_item)
             }
             
-            return Promise.resolve(results.result.length)
+            return Promise.resolve(results.awb_data.length)
         } catch (error) {
             return Promise.reject()
         } finally {
@@ -93,28 +92,59 @@ export function Tome() {
         }
     }
 
-    const apiGetAllFilter = async (page : number) => { 
+    // const apiGetAllFilter = async (page : number) => { 
+    //     setProgress(true)
+    //     try {
+    //         const results : FilterResponse = await toMeFilter(getRequestData(page))
+            
+    //         if (results.links.item_per_page > 0 ) {
+    //             setPrintItems(prev => ([...prev, ...results.result]));
+    //             setProgressPercent(( (results.links.item_per_page + ( 10 * (page - 1))) / results.links.item_count ) * 100)
+    //         }
+           
+    //         if(results.links.page_count == page){
+    //             setTimeout(() => {
+    //                 setProgressPercent(100)
+    //                 setProgress(false)
+    //             }, 1000)
+    //         }else {
+    //             apiGetAllFilter(page + 1)
+    //         }
+            
+    //     } catch (error) {
+    //         return Promise.reject()
+    //     } 
+    // }
+
+    const apiGetAllFilter = async (page: number) => {
         setProgress(true)
         try {
-            const results : FilterResponse = await toMeFilter(getRequestData(), page)
-            
-            if (results.links.item_per_page > 0 ) {
-                setPrintItems(prev => ([...prev, ...results.result]));
-                setProgressPercent(( (results.links.item_per_page + ( 10 * (page - 1))) / results.links.item_count ) * 100)
+            const results : FilterResponse = await toMeFilter(getRequestData(page))
+
+            if (results.awb_data.length > 0) {
+                setPrintItems(prev => ([...prev, ...results.awb_data]));
+                setProgressPercent(((results.awb_data.length + (80 * page )) / results.total_item) * 100)
             }
-           
-            if(results.links.page_count == page){
+
+            let count = 0
+            if(results.total_item % 80 == 0){
+                count = results.total_item / 80
+            }else {
+                count = Math.floor(results.total_item / 80)
+            }
+
+            if (count == page) {
                 setTimeout(() => {
                     setProgressPercent(100)
                     setProgress(false)
                 }, 1000)
-            }else {
+            } else {
                 apiGetAllFilter(page + 1)
             }
-            
+
         } catch (error) {
             return Promise.reject()
-        } 
+        }
     }
 
     const onClick = (row: ToMeList) => {
@@ -229,7 +259,7 @@ export function Tome() {
         return list
     }
 
-    const getRequestData = () => {
+    const getRequestData = (page : number) => {
         return {
             "date_from": filterFromDate,
             "date_to": filterToDate,
@@ -243,6 +273,7 @@ export function Tome() {
             "cod": filterCod ? "True" : "False",
             "delivered": filterDelivered ? "True" : "False",
             "paid": filterPaid ? "True" : "False",
+            "page": page
         }
     }
 
@@ -323,7 +354,7 @@ export function Tome() {
                     progressPercent={progressPercent}
                     totalCount={filterItemTotalCount}
                     excelFormator={ excelFormator }
-                    getAllItems={ () => apiGetAllFilter(1)}
+                    getAllItems={ () => apiGetAllFilter(0)}
                     clearFilter={ () => clearFilter()}
                     onOpenDialog={ () => _onOpenDialog()}
                     loading = {loading}/>

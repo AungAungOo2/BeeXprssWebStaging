@@ -58,25 +58,25 @@ export function FromMeItem(props: FromMeItemProps) {
 
 export function OrderItem(props: FromMeItemProps) {
     return (
-        <div style={{ flexDirection : 'row', display: 'flex', alignItems: "center" }}>
+        <div style={{ flexDirection: 'row', display: 'flex', alignItems: "center" }}>
             <Checkbox
-                checked={props.selected ? true : false}    
+                checked={props.selected ? true : false}
                 onChange={(event) => {
-                    event.stopPropagation( )
+                    event.stopPropagation()
                     props.onSelect()
                 }}
                 style={{ width: 50, height: 50 }}
                 {...props.selected}
-                />
+            />
             <Paper elevation={2} style={{ width: "95%", margin: "2%", backgroundColor: props.selected ? Colors.WHITE : Colors.THEME_PRIMARY }} onClick={props.onCLick}>
                 <Box display="flex" flexDirection="row" alignItems="center" style={{ padding: "2%" }}>
                     {/* <div onClick={(event) => {
                         event.stopPropagation()
                         props.onSelect()
                     }}> */}
-                        <CircleShape
-                            text={props.no}
-                            stylesProps={{ size: "50px", fontWeight: "bold" }} />
+                    <CircleShape
+                        text={props.no}
+                        stylesProps={{ size: "50px", fontWeight: "bold" }} />
                     {/* </div> */}
                     <Box flexGrow={1} flexDirection="column" style={{ paddingLeft: "20px" }}>
                         <Grid container spacing={0}>
@@ -170,7 +170,7 @@ export function ChargesAndCODContainer(props: {
     other_cost?: string | number,
     to_pay?: string | number,
     extra?: boolean
-    payment_type_id? : { id: number, name: string },
+    payment_type_id?: { id: number, name: string },
 }) {
     return (
         <Paper style={{ backgroundColor: Colors.THEME_PRIMARY }}>
@@ -193,8 +193,8 @@ export function ChargesAndCODContainer(props: {
                     <Box display="flex" flexGrow={1} alignItems="center" flexDirection="column" style={{ padding: 10 }}>
                         <Typography color={"secondary"}>To Receive</Typography>
                         <Typography color={"secondary"} style={{ fontWeight: "bold" }}>
-                            { props?.payment_type_id?.name == "Special Service" ? 
-                            props.cod_amount - (props.delivery_charges + props.other_cost) : props.cod_amount } MMK
+                            {props?.payment_type_id?.name == "Special Service" ?
+                                props.cod_amount - (props.delivery_charges + props.other_cost) : props.cod_amount} MMK
                         </Typography>
                     </Box>
                 </Box>
@@ -309,7 +309,7 @@ export const TimeSeriesList = ({ log }: { log: Array<logs> }) => {
 
 export function PrintContainer(props: { order: OrdersProps }) {
     return (
-        <Paper style={{ backgroundColor: Colors.WHITE, padding: 16,  margin: 32 }}>
+        <Paper style={{ backgroundColor: Colors.WHITE, padding: 16, margin: 32 }}>
             <Typography style={{ fontWeight: "bold", paddingLeft: 16, paddingTop: 32 }}> Create Date : {props.order.create_date} </Typography>
             <Box display="flex" alignItems="center" flexDirection="row" style={{ padding: 10 }}>
                 <Box display="flex" flexGrow={1} alignItems="center" flexDirection="column" style={{ padding: 10 }}>
@@ -391,12 +391,12 @@ export function PrintContainer(props: { order: OrdersProps }) {
                 <Box display="flex" flexGrow={1} flexDirection="column" alignItems="center" >
                     <Typography style={{ fontWeight: "bold", alignItems: "center" }}> {props.order.delivery_charges} </Typography>
                 </Box>
-                <Box display="flex" flexGrow={1} flexDirection="column" alignItems="center" >
+                {/* <Box display="flex" flexGrow={1} flexDirection="column" alignItems="center" >
                     <Typography style={{ fontWeight: "bold", alignItems: "center" }}> {props.order.delivery_charges} </Typography>
                 </Box>
                 <Box display="flex" flexGrow={1} flexDirection="column" alignItems="center" >
                     <Typography style={{ fontWeight: "bold", alignItems: "center" }}> 1000.0 </Typography>
-                </Box>
+                </Box> */}
             </Box>
 
 

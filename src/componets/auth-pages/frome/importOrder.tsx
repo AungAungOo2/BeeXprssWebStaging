@@ -46,12 +46,11 @@ export function ImportOrder(props: any) {
         let list: Array<JSX.Element> = []
         if (!ImportOrder) return list
         ImportOrder.map((row, index) => {
-            //if (index > 0) {
             list.push(
                 <TableRow key={index}>
                     <TableCell align="center">{_getValidity(row.valid)}</TableCell>
                     <TableCell align="center">{row.id}</TableCell>
-                    <TableCell align="center">{row.sender_id.id}</TableCell>
+                    <TableCell align="center">{row.sender_id.name}</TableCell>
                     <TableCell align="center">{row.sender_mobile}</TableCell>
                     <TableCell align="center">{row.origin_city.name}</TableCell>
                     <TableCell align="center">{row.origin_twsp_id.name}</TableCell>
@@ -110,27 +109,26 @@ export function ImportOrder(props: any) {
 
             })
             dispatch({ ImportOrder })
-            if (isValid){
+            if (isValid) {
                 setUnableCreate(true)
                 setUnableCalculate(false)
-            } 
+            }
         }
         setLoadingCalculate(false)
     }
 
     const _onCreateDraftAwb = async () => {
-        console.log("ImportOrder : ", ImportOrder)
+        console.log("ImportOrder : ", ImportOrder[0])
         setLoadingCreate(true)
         var failedCount = 0
         const result = await createDraftAwbList(ImportOrder)
         console.log("result : ", result)
         if (result) {
-            if(result.error){
+            if (result.error) {
                 alert(result.error.message)
-            }else if(result.temp_awb_data){
-                result.temp_awb_data.map(row => {
-                    console.log("row : ", row)
-                    if(!row.success) {
+            } else if (result.temp_awb_data) {
+                result.temp_awb_data.map((row: { success: any; id: number; }) => {
+                    if (!row.success) {
                         failedCount = failedCount + 1
                         ImportOrder.filter(order => order.id == row.id).map((row) => {
                             row.valid = "invalid"
@@ -143,12 +141,12 @@ export function ImportOrder(props: any) {
         setLoadingCreate(false)
         setUnableCreate(false)
 
-        if(failedCount == 0) {
+        if (failedCount == 0) {
             alert("All draft Awbs Successfully Created")
             history.push("/home/fromme")
-        }else {
-            alert( "Failed to create " + failedCount + " records")
-        }        
+        } else {
+            alert("Failed to create " + failedCount + " records")
+        }
     }
 
     return (
@@ -160,24 +158,24 @@ export function ImportOrder(props: any) {
                 Create Draft AWB
             </Button>} */}
 
-            {unableCalculate && <CustomizedButton 
+            {unableCalculate && <CustomizedButton
                 onClick={() => _onCalculateDeliveryCharges()}
-                containerStyle={{paddingLeft:"40px",paddingRight:"40px"}}
+                containerStyle={{ paddingLeft: "40px", paddingRight: "40px" }}
                 color={IconColor.DARK_GREY}
-                label="Calculate Delivery Charges" 
+                label="Calculate Delivery Charges"
                 icon={IconKeys.quote}
-                buttonColor={Colors.THEME_PRIMARY} 
-                loading={loadingCalculate} 
+                buttonColor={Colors.THEME_PRIMARY}
+                loading={loadingCalculate}
             />}
-            {unableCreate && <CustomizedButton 
+            {unableCreate && <CustomizedButton
                 onClick={() => _onCreateDraftAwb()}
-                containerStyle={{paddingLeft:"40px",paddingRight:"40px"}}
+                containerStyle={{ paddingLeft: "40px", paddingRight: "40px" }}
                 color={IconColor.DARK_GREY}
-                label="Create Draft AWB" 
+                label="Create Draft AWB"
                 icon={IconKeys.awb}
-                buttonColor={Colors.THEME_PRIMARY} 
-                loading={loadingCreate} 
-            /> }
+                buttonColor={Colors.THEME_PRIMARY}
+                loading={loadingCreate}
+            />}
 
             <TableContainer component={"div"}>
                 <Table className={classes.table} size="medium">
@@ -185,7 +183,7 @@ export function ImportOrder(props: any) {
                         <TableRow>
                             <TableCell></TableCell>
                             <TableCell>No.</TableCell>
-                            <TableCell align="center">Sender/Database ID</TableCell>
+                            <TableCell align="center">Sender Name</TableCell>
                             <TableCell align="center">Sender Mobile</TableCell>
                             <TableCell align="center">Origin City</TableCell>
                             <TableCell align="center">Origin Township</TableCell>

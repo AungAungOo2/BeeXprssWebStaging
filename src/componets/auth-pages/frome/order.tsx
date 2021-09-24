@@ -87,7 +87,7 @@ export function OrderList() {
     }
 
     const onSelectAll = () => {
-        
+
         items.map(item => item.selected = !selectAll)
         dispatch({ Order: items })
 
@@ -124,17 +124,16 @@ export function OrderList() {
     }
 
     const handleChange = async (e) => {
-        
         const files = Array.from(e.target.files);
         const [file] = files;
         var importList: Array<ExportOrderList> = []
         setAttachment(file);
-    
+
         await readXlsxFile(file).then((data) => {
             data.map((rows) => {
                 var data: ExportOrderList = {
                     id: rows[0],
-                    sender_id: { id: rows[1], name: "" },
+                    sender_id: { id: 0, name: rows[1], mobile: rows[2] },
                     sender_mobile: rows[2],
                     origin_city: { id: getCityId(rows[3]), name: rows[3] },
                     origin_twsp_id: { id: getTownshipId(rows[4]), name: rows[4] },
@@ -157,10 +156,16 @@ export function OrderList() {
                 importList.push(data)
             })
         })
-        importList.shift()
-        dispatch({ ImportOrder: importList })
-        history.push("/home/fromme/ImportOrder")
 
+        console.log("importList.length : ", importList.length)
+        if(importList.length > 1){
+            importList.shift()
+            dispatch({ ImportOrder: importList })
+            history.push("/home/fromme/ImportOrder")
+        }else {
+            alert("No record to create")
+        }
+        
     };
 
     const getCityId = (name: string) => {
@@ -185,12 +190,12 @@ export function OrderList() {
     }
 
     const handlePrint = () => {
-        if(items.filter( row => row.selected == true ).length > 0) {
-            let selectedRows = items.filter( row => row.selected == true )
-            console.log("selectedRows : ", selectedRows)
+        if (items.filter(row => row.selected == true).length > 0) {
+            let selectedRows = items.filter(row => row.selected == true)
+           
             dispatch({ OrderList: selectedRows })
             history.push("/home/fromme/PrintOrder")
-        } 
+        }
     }
 
     React.useEffect(() => {
@@ -211,7 +216,8 @@ export function OrderList() {
                         <Button onClick={() => setOpenDialog(false)} color="primary">
                             No
                         </Button>
-                        <Button onClick={() => {_closeDialog()
+                        <Button onClick={() => {
+                            _closeDialog()
                             handleConfirm()
                         }} color="primary">
                             Yes
@@ -222,26 +228,35 @@ export function OrderList() {
 
             <Grid container spacing={0}>
                 <Grid item xs={2}>
-                    { items.length > 0 && <Checkbox value={selectAll}
+                    {items.length > 0 && <Checkbox value={selectAll}
                         onChange={(event) => {
                             event.stopPropagation()
                             onSelectAll()
                         }}
                         style={{ width: 50, height: 50 }}
-                    /> } 
+                    />}
                 </Grid>
 
-                
-                <Grid item xs={10} container justify="flex-end" style={{ alignSelf: "center", alignItems: "center"}}>
 
-                    {enablePrint && <Button  color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight : 8, textTransform: "none" }}>
+                <Grid item xs={10} container justify="flex-end" style={{ alignSelf: "center", alignItems: "center" }}>
+
+                    {enablePrint && <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 8, textTransform: "none" }}>
                         Print
                         <input hidden onClick={() => handlePrint()} />
                     </Button>}
 
-                    <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight :16, textTransform: "none" }}>
+                    {/* <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 16, textTransform: "none" }}>
+                        Download Excel
+                    </Button> */}
+
+                    <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 16, textTransform: "none" }}>
+                        <a href='/src/componets/res/files/beexprss_create_awbs.xlsx' download>Download Excel</a>
+                    </Button>
+
+
+                    <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 16, textTransform: "none" }}>
                         Import Excel
-                        <input type="file" hidden onChange={ (e) => handleChange(e)} accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />  
+                        <input type="file" hidden onChange={(e) => handleChange(e)} accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
                     </Button>
 
                 </Grid>

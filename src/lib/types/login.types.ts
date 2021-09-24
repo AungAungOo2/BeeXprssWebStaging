@@ -12,7 +12,8 @@ export interface contact_data {
     "id"?:number,
     "mobile"?:string,
     "township"?:string,
-    "name"?:string
+    "name"?:string,
+    "is_credit_term"?:boolean
 }
 
 export interface payment_type {

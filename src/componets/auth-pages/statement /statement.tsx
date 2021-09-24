@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { FormContainer, AppContainer, LeftContainer, RightContainer } from '../../Standard UI/container/Container'
-import { TableContainer, Table, TableRow, TableHead, TableCell, TableBody, Paper, makeStyles, Grid, Typography, Divider, ThemeProvider, Link, Button, Chip, Avatar } from '@material-ui/core'
+import { TableContainer, Table, TableRow, TableHead, TableCell, TableBody, Paper, Box, makeStyles, Grid, Typography, Divider, ThemeProvider, Link, Button, Chip, Avatar } from '@material-ui/core'
 import { CustomizedPaper } from '../../Standard UI/paper/CustomizedPaper';
-import { Colors } from '../../res/color';
-import { getCustomerStatement } from '../../../lib/api';
+import { Colors, IconColor } from '../../res/color';
+import { filterStatement, getCustomerStatement } from '../../../lib/api';
 import { StatementProps } from '../../../lib/types/statement.type';
 import { CustomizedLinkButton, CustomizedButton } from '../../Standard UI/button/CustomizedButton';
 import { Icons, IconKeys } from '../../Standard UI/Icon';
@@ -42,34 +42,38 @@ export function Statement() {
     const [filterMood, setFilterMood] = React.useState<boolean>(false)
     const [loading, setLoading] = React.useState(false)
     const [openFilter, setOpenFilter] = React.useState(false)
+    const [oneTimeCall, setOneTimeCall] = React.useState(true)
+    const [filterOneTimeCall, setFilterOneTimeCall] = React.useState(true)
 
     const apiCall = async (page = 0) =>{
         try {
             const res=  await getCustomerStatement(page)
+            
             if(res) {
                 getTotal(res)
             }
             return Promise.resolve(res.length)   
         } catch (error) {
            alert(error.message)
+        } finally {
+            setOneTimeCall(false)
         }
     }
 
     const apiFilterCall = async (page = 0) => {
-        // console.log(getRequestData())
-        // try {
-        //     const results = await fromMeFilter(getRequestData(), page + 1)
-        
-        //     if (results.links.item_per_page > 0 ) {
-        //         setFilterItems( prev => ([...prev, ...results.result]))
-        //         setFilterItemTotalCount(results.links.item_count)
-        //     }
-        //     return Promise.resolve(results.result.length)
-        // } catch (error) {
-        //     return Promise.reject()
-        // } finally {
-        //     setFilterOneTimeCall(true)
-        // }
+        //console.log(getRequestData())
+        try {
+            const results = await filterStatement(getRequestData(page))
+            if (results.length > 0) {
+                setFilterItems( prev => ([...prev, ...results]))
+                //setFilterItemTotalCount(results.links.item_count)
+            }
+            return Promise.resolve(results.length)
+        } catch (error) {
+            return Promise.reject()
+        } finally {
+            setFilterOneTimeCall(false)
+        }
     }
 
     function getTotal(datas : Array<StatementProps>){
@@ -134,6 +138,74 @@ export function Statement() {
         window.location.reload();
     }
 
+    const getRequestData = (page : number) => {
+        return {
+            "date_from": filterFromDate,
+            "date_to": filterToDate,
+            "page": page
+        }
+    }
+
+    const RenderItemList = () => {
+        let list: Array<JSX.Element> = []
+        let data = filterMood ? filterItems : statement
+        let firstTime = filterMood ? filterOneTimeCall : oneTimeCall
+        data.map((row, index) => {
+            list.push(
+                <TableRow key={index}>
+                    <TableCell>
+                        <CustomizedLinkButton 
+                            underline 
+                            label={row.name} 
+                            onClick={()=>history.push("/home/statement/details",row)} 
+                            color="info" />
+                    </TableCell>
+                    
+                    <TableCell>
+                        <CustomizedLinkButton 
+                            underline 
+                            label={`Statement Date - ${moment(row.payment_date).format("DD/MM/YYYY")}`}
+                            onClick={()=>history.push("/home/statement/details",row)} 
+                            color="info" />
+                    </TableCell>
+
+                    <TableCell>
+                        <CustomizedLinkButton 
+                            label={`Total : ${row.net_total}`}
+                            onClick={()=>history.push("/home/statement/details",row)} 
+                            color="info" />
+                    </TableCell>
+
+                    <TableCell>
+                        <CustomizedLinkButton 
+                            label="Credit Notes"
+                            icon={IconKeys.tag}
+                            onClick={()=>history.push("/home/statement/credit_notes",row)} 
+                            color="info" />
+                    </TableCell>
+
+                    <TableCell>
+                        <CustomizedLinkButton 
+                            label="Attachment"
+                            icon={IconKeys.download}
+                            onClick={()=>{Zip(row.attachments,row.name.replace("/","_"))}} 
+                            color="info" />
+                    </TableCell>
+
+                    <TableCell>
+                        <CustomizedLinkButton 
+                            label={row.batch_state}
+                            onClick={()=>history.push("/home/statement/details",row)} 
+                            color="secondary" />
+                    </TableCell>
+                </TableRow>
+            )
+        })
+        if (data.length == 0 && !firstTime) {
+            return [<span />]
+        }
+        return list
+    }
 
     return (
         <AppContainer>
@@ -160,69 +232,147 @@ export function Statement() {
 
                     <Table>
                         <TableBody>
-                            <ScrollListener cb={page => apiCall(page)}>
+                            { !filterMood && <ScrollListener cb={page => apiCall(page)}>
                                 {
-                                    statement && statement.map((row,index)=>{
-                                        return(
-                                            <TableRow key={index}>
-                                                <TableCell>
-                                                    <CustomizedLinkButton 
-                                                        underline 
-                                                        label={row.name} 
-                                                        onClick={()=>history.push("/home/statement/details",row)} 
-                                                        color="info" />
-                                                </TableCell>
+                                    // statement && statement.map((row,index)=>{
+                                    //     return(
+                                    //         <TableRow key={index}>
+                                    //             <TableCell>
+                                    //                 <CustomizedLinkButton 
+                                    //                     underline 
+                                    //                     label={row.name} 
+                                    //                     onClick={()=>history.push("/home/statement/details",row)} 
+                                    //                     color="info" />
+                                    //             </TableCell>
                                                 
-                                                <TableCell>
-                                                    <CustomizedLinkButton 
-                                                        underline 
-                                                        label={`Statement Date - ${moment(row.payment_date).format("DD/MM/YYYY")}`}
-                                                        onClick={()=>history.push("/home/statement/details",row)} 
-                                                        color="info" />
-                                                </TableCell>
+                                    //             <TableCell>
+                                    //                 <CustomizedLinkButton 
+                                    //                     underline 
+                                    //                     label={`Statement Date - ${moment(row.payment_date).format("DD/MM/YYYY")}`}
+                                    //                     onClick={()=>history.push("/home/statement/details",row)} 
+                                    //                     color="info" />
+                                    //             </TableCell>
 
-                                                <TableCell>
-                                                    <CustomizedLinkButton 
-                                                        label={`Total : ${row.net_total}`}
-                                                        onClick={()=>history.push("/home/statement/details",row)} 
-                                                        color="info" />
-                                                </TableCell>
+                                    //             <TableCell>
+                                    //                 <CustomizedLinkButton 
+                                    //                     label={`Total : ${row.net_total}`}
+                                    //                     onClick={()=>history.push("/home/statement/details",row)} 
+                                    //                     color="info" />
+                                    //             </TableCell>
 
-                                                <TableCell>
-                                                    <CustomizedLinkButton 
-                                                        label="Credit Notes"
-                                                        icon={IconKeys.tag}
-                                                        onClick={()=>history.push("/home/statement/credit_notes",row)} 
-                                                        color="info" />
-                                                </TableCell>
+                                    //             <TableCell>
+                                    //                 <CustomizedLinkButton 
+                                    //                     label="Credit Notes"
+                                    //                     icon={IconKeys.tag}
+                                    //                     onClick={()=>history.push("/home/statement/credit_notes",row)} 
+                                    //                     color="info" />
+                                    //             </TableCell>
 
-                                                <TableCell>
-                                                    <CustomizedLinkButton 
-                                                        label="Attachment"
-                                                        icon={IconKeys.download}
-                                                        onClick={()=>{Zip(row.attachments,row.name.replace("/","_"))}} 
-                                                        color="info" />
-                                                </TableCell>
+                                    //             <TableCell>
+                                    //                 <CustomizedLinkButton 
+                                    //                     label="Attachment"
+                                    //                     icon={IconKeys.download}
+                                    //                     onClick={()=>{Zip(row.attachments,row.name.replace("/","_"))}} 
+                                    //                     color="info" />
+                                    //             </TableCell>
 
-                                                <TableCell>
-                                                    <CustomizedLinkButton 
-                                                        label={row.batch_state}
-                                                        onClick={()=>history.push("/home/statement/details",row)} 
-                                                        color="secondary" />
-                                                </TableCell>
-                                            </TableRow>
-                                        )
-                                    })
+                                    //             <TableCell>
+                                    //                 <CustomizedLinkButton 
+                                    //                     label={row.batch_state}
+                                    //                     onClick={()=>history.push("/home/statement/details",row)} 
+                                    //                     color="secondary" />
+                                    //             </TableCell>
+                                    //         </TableRow>
+                                    //     )
+                                    // })
+                                    
+                                    RenderItemList()
                                 }
-                            </ScrollListener>
+                            </ScrollListener> }
+
+                            { filterMood && <ScrollListener cb={page => apiFilterCall(page)}>
+                                {
+                                    // filterItems && filterItems.map((row,index)=>{
+                                    //     return(
+                                    //         <TableRow key={index}>
+                                    //             <TableCell>
+                                    //                 <CustomizedLinkButton 
+                                    //                     underline 
+                                    //                     label={row.name} 
+                                    //                     onClick={()=>history.push("/home/statement/details",row)} 
+                                    //                     color="info" />
+                                    //             </TableCell>
+                                                
+                                    //             <TableCell>
+                                    //                 <CustomizedLinkButton 
+                                    //                     underline 
+                                    //                     label={`Statement Date - ${moment(row.payment_date).format("DD/MM/YYYY")}`}
+                                    //                     onClick={()=>history.push("/home/statement/details",row)} 
+                                    //                     color="info" />
+                                    //             </TableCell>
+
+                                    //             <TableCell>
+                                    //                 <CustomizedLinkButton 
+                                    //                     label={`Total : ${row.net_total}`}
+                                    //                     onClick={()=>history.push("/home/statement/details",row)} 
+                                    //                     color="info" />
+                                    //             </TableCell>
+
+                                    //             <TableCell>
+                                    //                 <CustomizedLinkButton 
+                                    //                     label="Credit Notes"
+                                    //                     icon={IconKeys.tag}
+                                    //                     onClick={()=>history.push("/home/statement/credit_notes",row)} 
+                                    //                     color="info" />
+                                    //             </TableCell>
+
+                                    //             <TableCell>
+                                    //                 <CustomizedLinkButton 
+                                    //                     label="Attachment"
+                                    //                     icon={IconKeys.download}
+                                    //                     onClick={()=>{Zip(row.attachments,row.name.replace("/","_"))}} 
+                                    //                     color="info" />
+                                    //             </TableCell>
+
+                                    //             <TableCell>
+                                    //                 <CustomizedLinkButton 
+                                    //                     label={row.batch_state}
+                                    //                     onClick={()=>history.push("/home/statement/details",row)} 
+                                    //                     color="secondary" />
+                                    //             </TableCell>
+                                    //         </TableRow>
+                                    //     )
+                                    // })
+                                    RenderItemList()
+                                }
+                            </ScrollListener> }
                         </TableBody>
                     </Table>
+
+                    
+
                 </CustomizedPaper>
             </LeftContainer>
             <RightContainer/>
         </AppContainer>
     )
 }
+
+//  filterMood && statement.length == 0 &&
+//                         <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center" height="500px">
+//                             <Icons name={IconKeys.emptyIcon} color={IconColor.THEME_SECONDARY} size={30} />
+//                             {/* <TraceSpinner size={50} loading={true} frontColor={IconColor.THEME_PRIMARY} /> */}
+//                             <Typography color="secondary" style={{ marginLeft: 20 }} variant="h6">No record found</Typography>
+//                         </Box>
+                    
+
+                    //  !filterMood && filterItems.length == 0 && 
+                    //     <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center" height="500px">
+                    //         <Icons name={IconKeys.emptyIcon} color={IconColor.THEME_SECONDARY} size={30} />
+                    //         {/* <TraceSpinner size={50} loading={true} frontColor={IconColor.THEME_PRIMARY} /> */}
+                    //         <Typography color="secondary" style={{ marginLeft: 20 }} variant="h6">No record found</Typography>
+                    //     </Box>
+                    
 
 export function statementDetails(props:any){
 

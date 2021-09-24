@@ -12,9 +12,9 @@ import * as moment from 'moment';
 import { AwbsFilter, AwbsFilterBar } from '../../Standard UI/filter/AwbFilter';
 import { Excel } from '../../../lib/excel/excel';
 
-export interface ChipObject { 
-    key : string, 
-    value : string
+export interface ChipObject {
+    key: string,
+    value: string
 }
 
 export function AWBList() {
@@ -66,15 +66,14 @@ export function AWBList() {
     }
 
     const apiFilterCall = async (page = 0) => {
-        console.log(getRequestData())
         try {
-            const results = await fromMeFilter(getRequestData(), page + 1)
-        
-            if (results.links.item_per_page > 0 ) {
-                setFilterItems( prev => ([...prev, ...results.result]))
-                setFilterItemTotalCount(results.links.item_count)
+            const results = await fromMeFilter(getRequestData(page))
+
+            if (results.awb_data.length > 0) {
+                setFilterItems(prev => ([...prev, ...results.awb_data]))
+                setFilterItemTotalCount(results.total_item)
             }
-            return Promise.resolve(results.result.length)
+            return Promise.resolve(results.awb_data)
         } catch (error) {
             return Promise.reject()
         } finally {
@@ -82,31 +81,59 @@ export function AWBList() {
         }
     }
 
-    const apiGetAllFilter = async (page : number) => { 
+    // const apiGetAllFilter = async (page: number) => {
+    //     setProgress(true)
+    //     try {
+    //         const results: SearchResponse = await fromMeFilter(getRequestData(page))
+
+    //         if (results.links.item_per_page > 0) {
+    //             setPrintItems(prev => ([...prev, ...results.result]));
+    //             setProgressPercent(((results.links.item_per_page + (10 * (page - 1))) / results.links.item_count) * 100)
+    //         }
+
+    //         if (results.links.page_count == page) {
+    //             setTimeout(() => {
+    //                 setProgressPercent(100)
+    //                 setProgress(false)
+    //             }, 1000)
+    //         } else {
+    //             apiGetAllFilter(page + 1)
+    //         }
+
+    //     } catch (error) {
+    //         return Promise.reject()
+    //     }
+    // }
+
+    const apiGetAllFilter = async (page: number) => {
         setProgress(true)
         try {
-            const results : SearchResponse = await fromMeFilter(getRequestData(), page)
-            
-            if (results.links.item_per_page > 0 ) {
-                setPrintItems(prev => ([...prev, ...results.result]));
-                setProgressPercent(( (results.links.item_per_page + ( 10 * (page - 1))) / results.links.item_count ) * 100)
+            const results: SearchResponse = await fromMeFilter(getRequestData(page))
+
+            if (results.awb_data.length > 0) {
+                setPrintItems(prev => ([...prev, ...results.awb_data]));
+                setProgressPercent(((results.awb_data.length + (80 * page )) / results.total_item) * 100)
             }
-           
-            if(results.links.page_count == page){
+
+            let count = 0
+            if(results.total_item % 80 == 0){
+                count = results.total_item / 80
+            }else {
+                count = Math.floor(results.total_item / 80)
+            }
+
+            if (count == page) {
                 setTimeout(() => {
                     setProgressPercent(100)
                     setProgress(false)
                 }, 1000)
-            }else {
+            } else {
                 apiGetAllFilter(page + 1)
             }
-            
+
         } catch (error) {
             return Promise.reject()
-        } 
-        // finally {
-        //     setOneTimeCall(true)
-        // }
+        }
     }
 
     const _onClick = (param: FromMeList) => {
@@ -151,12 +178,12 @@ export function AWBList() {
         setFilterMood(true)
 
         await setChipList([])
-        await setFilterItems( prev => ([]) )
-        await setPrintItems( prev => ([]) )
+        await setFilterItems(prev => ([]))
+        await setPrintItems(prev => ([]))
         await setOpenFilter(false)
         await setProgressPercent(0)
-        
-        var list : ChipObject[] = []
+
+        var list: ChipObject[] = []
         if (filterFromDate != "" && filterToDate != "") list.push({ key: "date", value: filterFromDate + " to " + filterToDate })
 
         if (filterReceiver && type == "name" && filterName != "") list.push({ key: "type", value: filterName })
@@ -177,7 +204,7 @@ export function AWBList() {
         setOpenFilter(true)
     }
 
-    const onChangeType = (e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
+    const onChangeType = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setType(e.target.value)
         setFilterName("")
         setFilterAWB("")
@@ -186,7 +213,7 @@ export function AWBList() {
         setFilterTownship(undefined)
     }
 
-    const onChangeTypeValue = (event: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
+    const onChangeTypeValue = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setValueType(event.target.value)
         switch (type) {
             case "name": {
@@ -222,7 +249,7 @@ export function AWBList() {
         return list
     }
 
-    const getRequestData = () => {
+    const getRequestData = (page : number) => {
         return {
             "date_from": filterFromDate,
             "date_to": filterToDate,
@@ -236,6 +263,7 @@ export function AWBList() {
             "cod": filterCod ? "True" : "False",
             "delivered": filterDelivered ? "True" : "False",
             "received": filterReceived ? "True" : "False",
+            "page": page
         }
     }
 
@@ -250,7 +278,6 @@ export function AWBList() {
         if (printItems.length == 0) return
         const excelDataSet: Array<{}> = []
         printItems.map(row => {
-            console.log("row : ", row)
             excelDataSet.push({
                 "AWB No.": row.name,
                 "Sender Name": row.sender_id.name,
@@ -266,7 +293,7 @@ export function AWBList() {
                 "COD Amount": row.cod_amount,
                 "Delivery Charges": row.delivery_charges,
                 "Other Cost": row.other_cost,
-                "To Receive": row.payment_type_id.name == "Special Service" ? row.cod_amount - (row.delivery_charges + row.other_cost)  : row.cod_amount,
+                "To Receive": row.payment_type_id.name == "Special Service" ? row.cod_amount - (row.delivery_charges + row.other_cost) : row.cod_amount,
                 "Goods Weight(kg)": row.weight,
                 "Remark": row.remark,
                 "Description": row.description,
@@ -282,67 +309,67 @@ export function AWBList() {
     return (
 
         <div>
-            <AwbsFilter 
+            <AwbsFilter
                 searchType="fromme"
-                openFilter = {openFilter}
-                title = "Filter From Me"
-                information = "Receiver Information"
-                filterFromDate = {filterFromDate}
-                onChangeFromDate = { (e) => setFilterFromDate(e.target.value) }
-                filterToDate = {filterToDate}
-                onChangeToDate = { (e) => setFilterToDate(e.target.value) }
-                filterReceiver = {filterReceiver}
-                onChangefilterReceiver = { () => setFilterReceiver(!filterReceiver) }
-                type = {type}
-                onChangeType = { e => onChangeType(e)}
-                onChangeTypeValue = { e => onChangeTypeValue(e) }
-                valueType = {valueType}
-                onChangeCity = {(e, value) => setFilterCity(value) }
-                onChangeTownship = { (e, value) => setFilterTownship(value) }
-                filterStatus = {filterStatus}
-                onChangefilterStatus = { () => setFilterStatus(!filterStatus) }
-                filterDelivered = {filterDelivered}
-                onChangefilterDelivered = { () => setFilterDelivered(!filterDelivered) }
-                filterCod = {filterCod}
-                onChangefilterCod = { () => setFilterCod(!filterCod) }
-                filterCash = {filterReceived}
-                onChangefilterCash = { () => setFilterReceived(!filterReceived)}
-                onCloseDialog = { () => _onCloseDialog() }
-                onFilter = { () => _onFilter() }/>
+                openFilter={openFilter}
+                title="Filter From Me"
+                information="Receiver Information"
+                filterFromDate={filterFromDate}
+                onChangeFromDate={(e) => setFilterFromDate(e.target.value)}
+                filterToDate={filterToDate}
+                onChangeToDate={(e) => setFilterToDate(e.target.value)}
+                filterReceiver={filterReceiver}
+                onChangefilterReceiver={() => setFilterReceiver(!filterReceiver)}
+                type={type}
+                onChangeType={e => onChangeType(e)}
+                onChangeTypeValue={e => onChangeTypeValue(e)}
+                valueType={valueType}
+                onChangeCity={(e, value) => setFilterCity(value)}
+                onChangeTownship={(e, value) => setFilterTownship(value)}
+                filterStatus={filterStatus}
+                onChangefilterStatus={() => setFilterStatus(!filterStatus)}
+                filterDelivered={filterDelivered}
+                onChangefilterDelivered={() => setFilterDelivered(!filterDelivered)}
+                filterCod={filterCod}
+                onChangefilterCod={() => setFilterCod(!filterCod)}
+                filterCash={filterReceived}
+                onChangefilterCash={() => setFilterReceived(!filterReceived)}
+                onCloseDialog={() => _onCloseDialog()}
+                onFilter={() => _onFilter()} />
 
-            <AwbsFilterBar 
+            <AwbsFilterBar
                 sheetName={"FromMe"}
-                renderChipList = { () => renderChipList()} 
-                filterMood = {filterMood}
-                count= {printItems.length}
+                renderChipList={() => renderChipList()}
+                filterMood={filterMood}
+                count={printItems.length}
                 progress={progress}
                 progressPercent={progressPercent}
                 totalCount={filterItemTotalCount}
-                excelFormator={ excelFormator }
-                getAllItems={ () => apiGetAllFilter(1)}
-                clearFilter={ () => clearFilter()}
-                onOpenDialog={ () => _onOpenDialog()}
-                loading = {loading}/>
+                excelFormator={excelFormator}
+                getAllItems={() => apiGetAllFilter(0)}
+                clearFilter={() => clearFilter()}
+                onOpenDialog={() => _onOpenDialog()}
+                loading={loading} />
 
-            { progress && <Box display="flex" alignItems="center">
+            {progress && <Box display="flex" alignItems="center">
                 <Box width="100%" mr={1}>
                     <LinearProgress color="secondary" variant="buffer" valueBuffer={progressPercent} value={progressPercent} />
                 </Box>
                 <Box minWidth={35}>
                     <Typography variant="body2" color="textSecondary">{`${Math.round(
-                     progressPercent
+                        progressPercent
                     )}%`}</Typography>
                 </Box>
-                </Box> }
+            </Box>}
 
-            { !filterMood && <ScrollListener cb={page => apiCall(page)}>
-                { RenderItemList() }
-            </ScrollListener> }
+            {!filterMood && <ScrollListener cb={page => apiCall(page)}>
+                {RenderItemList()}
+            </ScrollListener>}
 
-            { filterMood && <ScrollListener cb={page => apiFilterCall(page)}>
-                { RenderItemList() }
-            </ScrollListener> }
-    
+            {filterMood && <ScrollListener cb={page => apiFilterCall(page)}>
+                {RenderItemList()}
+            </ScrollListener>}
+
         </div>
     )
 }

@@ -8,6 +8,7 @@ import {
     FORGET_PASSWORD_URL,
     SEND_SMS,
     GET_CUSTOMER_STATEMENT,
+    STATEMENT_FILTER,
     GET_CREDIT_NOTES,
     CANCEL_PICKUP,
     CHECK_DUPLICATE_PICKUP,
@@ -48,11 +49,11 @@ const SMS_API = axios.create({
 API1.interceptors.request.use(config => {
     if (config.url == LOGIN_URL || config.url == EMAIL_CHECKING_URL || config.url == FORGET_PASSWORD_URL) return config
     config.data = { ...auth.getLogin(), ...{ database: DATABASE_NAME }, ...config.data }
+    console.log("config data : ", config.data)
     return config
 });
 
 API1.interceptors.response.use(res => {
-    console.log("res : ",res)
     if (res.config.url == EMAIL_CHECKING_URL) return res
     if (res.data.error) throw new Error("Odoo Server Error")
     if (res.data.result.error) throw new Error(res.data.result.error || "Server error")
@@ -113,9 +114,9 @@ export async function toMe(page: number): Promise<Array<ToMeList>> {
     }
 }
 
-export async function toMeFilter(data: any, page: number): Promise<FilterResponse> {
+export async function toMeFilter(data: any): Promise<FilterResponse> {
     try {
-        const response = await API1.post(TO_ME_FILTER_URL + page, data)
+        const response = await API1.post(TO_ME_FILTER_URL, data)
         return response.data.result
     } catch (error) {
         return Promise.reject(error)
@@ -131,9 +132,9 @@ export async function fromMe(page: number): Promise<Array<FromMeList>> {
     }
 }
 
-export async function fromMeFilter(data: any, page: number): Promise<SearchResponse> {
+export async function fromMeFilter(data: any): Promise<SearchResponse> {
     try {
-        const response = await API1.post(FROM_ME_FILTER_URL + page, data)
+        const response = await API1.post(FROM_ME_FILTER_URL, data)
         return response.data.result
     } catch (error) {
         console.log("error : ", error)
@@ -173,6 +174,17 @@ export async function checkRegisterPhone(mobile: string) {
 export async function getCustomerStatement(page: number): Promise<Array<StatementProps>> {
     try {
         const response = await API1.post(GET_CUSTOMER_STATEMENT, { page })
+        return response.data.result
+    } catch (error) {
+        return Promise.reject(error)
+    }
+}
+
+export async function filterStatement(data : any): Promise<Array<StatementProps>> {
+    console.log("request data : ", data)
+    try {
+        const response = await API1.post(STATEMENT_FILTER,  data )
+        console.log("response : ", response.data.result)
         return response.data.result
     } catch (error) {
         return Promise.reject(error)

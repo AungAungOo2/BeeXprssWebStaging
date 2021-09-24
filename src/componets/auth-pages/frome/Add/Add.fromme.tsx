@@ -42,6 +42,7 @@ export function FromMeAdd(){
     const [deliCharge,setDeliCharge] = React.useState(0)
     const [receiveAmount,setReceiveAmount] = React.useState(0)
     const [receiverFullAddress,setReceiverFullAddress] = React.useState<string>()
+    const [creditTerm, setCreditTerm] = React.useState(false)
 
     window.onbeforeunload = function () {
         window.scrollTo(0, 0);
@@ -497,7 +498,7 @@ export function FromMeAdd(){
                                     />
                                 } label="Receiver Pay" />
                             </Box>
-                            <Box flexGrow={1}>
+                            { auth.isCreditTermCustomer() && <Box flexGrow={1}>
                                 <FormControlLabel value="Special Service"control={
                                     <Radio
                                         checked={selectedServicePay === "Special Service"}
@@ -507,7 +508,7 @@ export function FromMeAdd(){
                                         inputProps={{ 'aria-label': 'Special Service' }}
                                     />
                                 } label="Special Service" />
-                            </Box>
+                            </Box>}
                         </Box>
 
                         <Box display="flex" flexDirection="row" alignItems="center" style={{marginTop:20}}>

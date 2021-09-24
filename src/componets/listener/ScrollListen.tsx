@@ -82,7 +82,7 @@ export function ScrollListener(props: actinProps) {
             </Box>
         )
     }
-
+    
     if (props.children.length == 1) {
         if (props.children[0].type == "span") {
             return (

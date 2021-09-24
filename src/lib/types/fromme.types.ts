@@ -148,7 +148,7 @@ export interface ExportOrderList {
     service_priority: string,
     description: string,
     service_type_id: { id: 3, name: string },
-    sender_id: { id: 95831, name: string }
+    sender_id: { id: 95831, name: string, mobile: string }
     receiver_full_address: string
     receiver_mobile: string
     weight: 1
@@ -174,18 +174,24 @@ export interface ExportOrderList {
     senderFullAddress?: string,
     receiverFullAddress?: string,
     receiver_name?: string,
+    valid?: string,
 }
 
+// export interface SearchResponse {
+//     result: FromMeList[],
+//     status: number,
+//     links: {
+//         self: {
+//             url: string
+//         },
+//         item_per_page: number,
+//         item_count: number,
+//         page_count: number
+//     }
+// }
 
 export interface SearchResponse {
-    result : FromMeList[],
+    awb_data : FromMeList[],
     status : number,
-    links : {
-        self : {
-            url: string
-        },
-        item_per_page: number,
-        item_count: number,
-        page_count: number
-    }
+    total_item : number
 }

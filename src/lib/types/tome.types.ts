@@ -53,14 +53,7 @@ export interface toMeLogs {
 }
 
 export interface FilterResponse {
-    result : ToMeList[],
+    awb_data : ToMeList[],
     status : number,
-    links : {
-        self : {
-            url: string
-        },
-        item_per_page: number,
-        item_count: number,
-        page_count: number
-    }
+    total_item : number
 }
