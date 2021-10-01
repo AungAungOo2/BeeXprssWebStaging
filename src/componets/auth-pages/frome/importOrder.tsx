@@ -118,11 +118,9 @@ export function ImportOrder(props: any) {
     }
 
     const _onCreateDraftAwb = async () => {
-        console.log("ImportOrder : ", ImportOrder[0])
         setLoadingCreate(true)
         var failedCount = 0
         const result = await createDraftAwbList(ImportOrder)
-        console.log("result : ", result)
         if (result) {
             if (result.error) {
                 alert(result.error.message)

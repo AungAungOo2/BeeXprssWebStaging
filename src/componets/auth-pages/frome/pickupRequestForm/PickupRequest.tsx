@@ -119,8 +119,6 @@ export function PickupRequestForm() {
             township_id: township?.id
         }
 
-        //console.log("data =========== ", data.city_id, data.township_id)
-
         setRequestData(data)
         onCheckDuplicate(date, data)
 
@@ -131,12 +129,6 @@ export function PickupRequestForm() {
             customer_id: userId,
             time_to_pick: date
         })
-
-        console.log("duplicate req : ", {
-            customer_id: userId,
-            time_to_pick: date
-        })
-        console.log("duplicate response : ", response)
 
         if (response) {
             if (response.error) alert(response.error)
@@ -161,11 +153,9 @@ export function PickupRequestForm() {
     }
 
     const onSubmit = async (data: createPickUpProps) => {
-        //console.log("onSubmit : ", data)
         try {
             setLoading(true)
             const response = await createPickUp(data)
-            //console.log("onSubmit response : ", response)
             alert("Pickup Request Create Successful")
             history.push("/home/fromme")
         } catch (error) {

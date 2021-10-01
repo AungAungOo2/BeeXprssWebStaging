@@ -39,6 +39,7 @@ export interface FromMeList {
     sender_full_address: string
     sender_mobile: string
     delivered_time: string
+    delivered_date: string
     awb_created_date: string
     name: string,
     senderFullAddress?: string,
@@ -147,23 +148,23 @@ export interface ExportOrderList {
     signature: string,
     service_priority: string,
     description: string,
-    service_type_id: { id: 3, name: string },
-    sender_id: { id: 95831, name: string, mobile: string }
+    service_type_id: { id: 0, name: string },
+    sender_id: { id: 0, name: string, mobile: string }
     receiver_full_address: string
     receiver_mobile: string
-    weight: 1
-    origin_city: { id: 63, name: string }
+    weight: 0
+    origin_city: { id: 0, name: string }
     recipient_name: string
     delivery_charges: number
     cash_by_first_mile: number
-    dest_city: { id: 63, name: string }
+    dest_city: { id: 0, name: string }
     temp_awb_number: string
     current_depot: { id: number, name: string }
     current_status: { id: number, name: string }
     receiver_id: { id: number, name: string }
     cod_amount: number
-    recipient_type: { id: number, name: string }
-    payment_type_id: { id: number, name: string }
+    recipient_type: { id: 0, name: string }
+    payment_type_id: { id: 0, name: string }
     goods_type: string
     other_cost: number
     sender_full_address: string

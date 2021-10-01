@@ -12,7 +12,6 @@ export function AWBDetails(props:any){
 
     React.useEffect(()=>{
         if(!state||!state.FromMeList||!state.FromMeList.id) history.push("/home/fromme")
-       
     },[])
 
     if(!state||!state.FromMeList||!state.FromMeList.id) return <div />

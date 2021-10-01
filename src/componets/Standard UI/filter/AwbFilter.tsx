@@ -1,19 +1,17 @@
 import * as React from 'react'
-import { Button, Paper, Container, Box, Typography, Tabs, Tab, Chip, Avatar, Grid, Select, MenuItem, TextField, Checkbox, FormControlLabel, Radio, makeStyles, InputBase, createStyles, Theme } from "@material-ui/core"
+import { Button, Box, Grid, Select, MenuItem, TextField, Checkbox, FormControlLabel, Radio, makeStyles, InputBase, createStyles, Theme } from "@material-ui/core"
 import { getCity, cityProps, getTownship, townshipProps } from '../../../lib/storage/CityAndTownship'
 import { CustomizedAutoCompleteBox } from '../../Standard UI/Input/CustomizedInputs'
 import IconButton from '@material-ui/core/IconButton';
 import { Icons, IconKeys } from '../../Standard UI/Icon'
-import { IconColor, Colors } from '../../res/color'
+import { Colors } from '../../res/color'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { CustomizedButton, CustomizedLinkButton } from '../../Standard UI/button/CustomizedButton'
+import { CustomizedButton } from '../../Standard UI/button/CustomizedButton'
 import * as moment from 'moment'
 import { Excel } from '../../../lib/excel/excel';
-import { LinearProgress } from 'material-ui';
-import CircularProgress from 'material-ui/CircularProgress';
 
 type params = {
     searchType : string,
@@ -44,7 +42,6 @@ type params = {
     onFilter: Function,
   }
 export function AwbsFilter(props:params) {
-
     return (
         <div>
             <Dialog open={props.openFilter} aria-labelledby="form-dialog-title">
@@ -96,7 +93,8 @@ export function AwbsFilter(props:params) {
                             </Select>
                             {props.type != 'city' && props.type != 'township' && <TextField onChange={(e) => props.onChangeTypeValue(e)} margin="dense" label="Enter here" fullWidth value={props.valueType} />}
                             {props.type == 'city' && <CustomizedAutoCompleteBox options={getCity()} getOptionLabel={(option: cityProps) => option.name} label="Select City" onChange={(e, value) => props.onChangeCity(e, value)} />}
-                            {props.type == 'township' && <CustomizedAutoCompleteBox options={getTownship()} getOptionLabel={(option: townshipProps) => option.name} label="Select Township" onChange={(e, value) => props.onChangeTownship(e, value)} />}
+                            {props.type == 'township' && <CustomizedAutoCompleteBox options={getTownship()} getOptionLabel={(option: townshipProps) => option.name} label="Select Township" onChange={(e, value) =>{console.log("value ", value) 
+                            props.onChangeTownship(e, value)} } />}
                         </div>
                     }
 

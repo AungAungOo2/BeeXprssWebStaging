@@ -9,7 +9,6 @@ import { IconKeys, Icons } from '../../componets/Standard UI/Icon';
 
 export default function DialogInfo(){
 
-    console.log("DialogInfo")
   // const [open, setOpen] = React.useState(false);
   // const [message, setMessage] = React.useState("");
 

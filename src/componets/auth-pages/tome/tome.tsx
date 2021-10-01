@@ -6,28 +6,33 @@ import { toMe, toMeFilter } from '../../../lib/api'
 import { FilterResponse, ToMeList } from '../../../lib/types/tome.types'
 import history from '../../history'
 import tomeContext from '../../../context/tome.context'
-import { getCity, cityProps, getTownship, townshipProps, getTownshipByCityId } from '../../../lib/storage/CityAndTownship'
+import { cityProps, townshipProps } from '../../../lib/storage/CityAndTownship'
 import { AppContainer, LeftContainer, RightContainer } from '../../Standard UI/container/Container'
 import { ScrollListener } from '../../listener/ScrollListen'
 import * as moment from 'moment';
 import { AwbsFilter, AwbsFilterBar } from '../../Standard UI/filter/AwbFilter';
+import { API_TIMEOUT, FILTER_PAGINATION_COUNT } from '../../../lib/config'
+import { ChipObject, FilterToMeObject } from '../../../lib/types/filter.types'
 
-const useStyles = makeStyles({
-    root: {
-        marginTop: "10px",
-        flexGrow: 1,
-        padding: 0
-    },
-});
-
-export interface ChipObject { 
-    key : string, 
-    value : string
+const data = {
+    "date_from": moment().format('YYYY-MM-DD'),
+    "date_to": moment().format('YYYY-MM-DD'),
+    "sender_name": "",
+    "sender_phone": "",
+    "awb_no": "",
+    "city_id":  "",
+    "city": {},
+    "township_id": "",
+    "township": {},
+    "sender": false,
+    "status": false,
+    "cod": false,
+    "delivered": false,
+    "paid": false
 }
 
 export function Tome() {
 
-    const classes = useStyles();
     const [items, setItems] = React.useState<Array<ToMeList>>([])
     const [filterItems, setFilterItems] = React.useState<Array<ToMeList>>([])
     const [printItems, setPrintItems] = React.useState<Array<ToMeList>>([])
@@ -38,27 +43,40 @@ export function Tome() {
     const [openFilter, setOpenFilter] = React.useState(false)
     const [type, setType] = React.useState("name")
     const [valueType, setValueType] = React.useState("")
-    const [filterName, setFilterName] = React.useState("")
-    const [filterAWB, setFilterAWB] = React.useState("")
-    const [filterPhone, setFilterPhone] = React.useState("")
-    const [filterTownship, setFilterTownship] = React.useState<cityProps>()
-    const [filterCity, setFilterCity] = React.useState<townshipProps>()
-    const [filterDelivered, setFilterDelivered] = React.useState<boolean>(false)
-    const [filterPaid, setFilterPaid] = React.useState<boolean>(false)
-    const [filterStatus, setFilterStatus] = React.useState<boolean>(false)
-    const [filterCod, setFilterCod] = React.useState<boolean>(false)
-    const [filterReceiver, setFilterReceiver] = React.useState<boolean>(false)
-    const currentDate = moment().format('YYYY-MM-DD')
-    const [filterFromDate, setFilterFromDate] = React.useState<string | Date>(currentDate)
-    const [filterToDate, setFilterToDate] = React.useState<string | Date>(currentDate)
     const [chipList, setChipList] = React.useState<Array<ChipObject>>([])
     const [filterMood, setFilterMood] = React.useState<boolean>(false)
     const [filterItemTotalCount, setFilterItemTotalCount] = React.useState<number>(0)
     const [progress, setProgress] = React.useState(false)
     const [progressPercent, setProgressPercent] = React.useState(0)
+    const [filterObject, setFilterObject] = React.useState<FilterToMeObject>(data as FilterToMeObject)
 
     window.onbeforeunload = function () {
         window.scrollTo(0, 0);
+    }
+
+    React.useEffect( () => {
+        let data = window.sessionStorage.getItem("@filterToMe")
+        if (history.action === "POP" && data) {
+            let filtered = JSON.parse(data)
+            setFilterObject(filtered)
+            window.sessionStorage.removeItem("@filterToMe")
+            setBackFilter(filtered)
+        }else {
+            apiCall()
+        }  
+    }, [])   
+    
+    
+    const setBackFilter = async (data : any) => {
+        _onFilter(data)
+    }
+
+    const onClick = (row: ToMeList) => {
+        if(filterMood){
+            window.sessionStorage.setItem("@filterToMe", JSON.stringify(filterObject))
+        }
+        dispatch(row)
+        history.push("/home/tome/details")
     }
 
     const apiCall = async (page = 0) => {
@@ -76,61 +94,39 @@ export function Tome() {
         }
     }
 
-    const apiFilterCall = async (page = 0) => {
+    const apiFilterCall = async (data : FilterToMeObject, page = 0) => {
         try {
-            const results = await toMeFilter(getRequestData(page))
+            const results = await toMeFilter(getRequestData(data,page))
             if (results.awb_data.length > 0 ) {
                 setFilterItems( prev => ([...prev, ...results.awb_data]))
                 setFilterItemTotalCount(results.total_item)
             }
-            
             return Promise.resolve(results.awb_data.length)
         } catch (error) {
+            if(error == "Error: timeout of "+ API_TIMEOUT +"ms exceeded"){
+                alert("Exceeded timeout, Please try agian.")
+            }
             return Promise.reject()
         } finally {
             setFilterOneTimeCall(true)
         }
     }
 
-    // const apiGetAllFilter = async (page : number) => { 
-    //     setProgress(true)
-    //     try {
-    //         const results : FilterResponse = await toMeFilter(getRequestData(page))
-            
-    //         if (results.links.item_per_page > 0 ) {
-    //             setPrintItems(prev => ([...prev, ...results.result]));
-    //             setProgressPercent(( (results.links.item_per_page + ( 10 * (page - 1))) / results.links.item_count ) * 100)
-    //         }
-           
-    //         if(results.links.page_count == page){
-    //             setTimeout(() => {
-    //                 setProgressPercent(100)
-    //                 setProgress(false)
-    //             }, 1000)
-    //         }else {
-    //             apiGetAllFilter(page + 1)
-    //         }
-            
-    //     } catch (error) {
-    //         return Promise.reject()
-    //     } 
-    // }
-
     const apiGetAllFilter = async (page: number) => {
         setProgress(true)
         try {
-            const results : FilterResponse = await toMeFilter(getRequestData(page))
+            const results : FilterResponse = await toMeFilter(getRequestData(filterObject, page))
 
             if (results.awb_data.length > 0) {
                 setPrintItems(prev => ([...prev, ...results.awb_data]));
-                setProgressPercent(((results.awb_data.length + (80 * page )) / results.total_item) * 100)
+                setProgressPercent(((results.awb_data.length + (FILTER_PAGINATION_COUNT * page )) / results.total_item) * 100)
             }
 
             let count = 0
-            if(results.total_item % 80 == 0){
-                count = results.total_item / 80
+            if(results.total_item % FILTER_PAGINATION_COUNT == 0){
+                count = results.total_item / FILTER_PAGINATION_COUNT
             }else {
-                count = Math.floor(results.total_item / 80)
+                count = Math.floor(results.total_item / FILTER_PAGINATION_COUNT)
             }
 
             if (count == page) {
@@ -145,11 +141,6 @@ export function Tome() {
         } catch (error) {
             return Promise.reject()
         }
-    }
-
-    const onClick = (row: ToMeList) => {
-        dispatch(row)
-        history.push("/home/tome/details")
     }
 
     const RenderItemList = () => {
@@ -177,15 +168,11 @@ export function Tome() {
         return list
     }
 
-    React.useEffect(() => {
-        apiCall()
-    }, [])
-
     const _onCloseDialog = () => {
         setOpenFilter(false)
     }
 
-    const _onFilter = async () => {
+    const _onFilter = async (filterObject : FilterToMeObject) => { 
         setFilterMood(true)
 
         await setChipList([])
@@ -195,19 +182,19 @@ export function Tome() {
         await setProgressPercent(0)
 
         var list : ChipObject[] = []
-        if (filterFromDate != "" && filterToDate != "") list.push({ key: "date", value: filterFromDate + " to " + filterToDate })
+        if (filterObject?.date_from != "" && filterObject?.date_to != "") list.push({ key: "date", value: filterObject?.date_from + " to " + filterObject?.date_to })
 
-        if (filterReceiver && type == "name" && filterName != "") list.push({ key: "type", value: filterName })
-        else if (filterReceiver && type == "awb" && filterAWB != "") list.push({ key: "type", value: filterAWB })
-        else if (filterReceiver && type == "phone" && filterPhone != "") list.push({ key: "type", value: filterPhone })
-        else if (filterReceiver && type == "city" && filterCity?.name != "") list.push({ key: "type", value: filterCity?.name || ""})
-        else if (filterReceiver && type == "township" && filterTownship?.name != "") list.push({ key: "type", value: filterTownship?.name || ""})
+        if (filterObject?.sender && type == "name" && filterObject?.sender_name != "") list.push({ key: "type", value: filterObject?.sender_name })
+        else if (filterObject?.sender && type == "awb" && filterObject?.awb_no != "") list.push({ key: "type", value: filterObject?.awb_no })
+        else if (filterObject?.sender && type == "phone" && filterObject?.sender_phone != "") list.push({ key: "type", value: filterObject?.sender_phone })
+        else if (filterObject?.sender && type == "city" && filterObject?.city.name != "") list.push({ key: "type", value: filterObject?.city.name || ""})
+        else if (filterObject?.sender && type == "township" && filterObject?.township.name != "") list.push({ key: "type", value: filterObject?.township.name || ""})
 
-        if (filterStatus) list.push({ key: "delivered", value: filterDelivered ? "Delivered" : "Not Delivered" })
-        if (filterCod) list.push({ key: "cod", value: filterPaid ? "Paid" : "Not Paid" })
+        if (filterObject?.status) list.push({ key: "delivered", value: filterObject?.delivered ? "Delivered" : "Not Delivered" })
+        if (filterObject?.cod) list.push({ key: "cod", value: filterObject?.paid ? "Paid" : "Not Paid" })
 
         setChipList(list)
-        apiFilterCall()
+        apiFilterCall(filterObject)
     }
 
     const _onOpenDialog = () => {
@@ -217,26 +204,23 @@ export function Tome() {
 
     const onChangeType = (event: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
         setType(event.target.value)
-        setFilterName("")
-        setFilterAWB("")
-        setFilterPhone("")
-        setFilterCity(undefined)
-        setFilterTownship(undefined)
+        setFilterObject( prev => ({ ...prev, ...{ sender_name : "", awb_no : "", sender_phone: "", city_id : 0, township_id : 0, city : {} as cityProps, township : {} as townshipProps}}))
     }
 
     const onChangeTypeValue = (event: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
         setValueType(event.target.value)
+        let data = event.target.value
         switch (type) {
             case "name": {
-                setFilterName(event.target.value)
+                setFilterObject( prev => ({...prev, sender_name : data}))
                 break
             }
             case "awb": {
-                setFilterAWB(event.target.value)
+                setFilterObject(prev => ({...prev, awb_no : data}))
                 break
             }
             case "phone": {
-                setFilterPhone(event.target.value)
+                setFilterObject(prev => ({...prev, sender_phone : data}))
                 break
             }
         }
@@ -259,21 +243,17 @@ export function Tome() {
         return list
     }
 
-    const getRequestData = (page : number) => {
+    const getRequestData = (data : FilterToMeObject, page : number) => {
         return {
-            "date_from": filterFromDate,
-            "date_to": filterToDate,
-            "receiver": filterReceiver ? "True" : "False",
-            "receiver_name": filterName,
-            "receiver_phone": filterPhone,
-            "awb_no": filterAWB,
-            "city_id": filterCity?.id || "",
-            "township_id": filterTownship?.id || "",
-            "status": filterStatus ? "True" : "False",
-            "cod": filterCod ? "True" : "False",
-            "delivered": filterDelivered ? "True" : "False",
-            "paid": filterPaid ? "True" : "False",
-            "page": page
+            ...data, 
+            ...{
+                "sender": data.sender ? "True" : "False",
+                "status": data.status ? "True" : "False",
+                "cod": data.cod ? "True" : "False",
+                "delivered": data.delivered ? "True" : "False",
+                "paid": data.paid ? "True" : "False",
+                "page": page
+            }
         }
     }
 
@@ -306,7 +286,7 @@ export function Tome() {
                 "Remark": row.remark,
                 "Description": row.description,
                 "Created Date": row.awb_created_date,
-                "Deliverd Date": row.delivered_time,
+                "Deliverd Date": row.delivered_date,
                 "Status": row.current_status.name.split("]")[1],
             })
         })
@@ -315,34 +295,41 @@ export function Tome() {
 
     return (
         <AppContainer>
-            
             <AwbsFilter 
                 searchType="tome"
                 openFilter = {openFilter}
                 title = "Filter To Me"
                 information = "Sender Information"
-                filterFromDate = {filterFromDate}
-                onChangeFromDate = { (e) => setFilterFromDate(e.target.value)}
-                filterToDate = {filterToDate}
-                onChangeToDate = { (e) => setFilterToDate(e.target.value)}
-                filterReceiver = {filterReceiver}
-                onChangefilterReceiver = { () => setFilterReceiver(!filterReceiver)}
+                filterFromDate = {filterObject?.date_from}
+                onChangeFromDate = { (e) => {
+                        let data = e.target.value
+                        setFilterObject( prev => ({...prev, date_from : data}))
+                    }
+                }
+                filterToDate = {filterObject?.date_to}
+                onChangeToDate = { (e) => {
+                        let data = e.target.value
+                        setFilterObject( prev => ({...prev, date_to : data}))
+                    }
+                }
+                filterReceiver = {filterObject?.sender}
+                onChangefilterReceiver = { () => setFilterObject( prev => ({...prev, sender : !prev.sender}) ) }
                 type = {type}
                 onChangeType = { e => onChangeType(e)}
                 onChangeTypeValue = { e => onChangeTypeValue(e)}
                 valueType = {valueType}
-                onChangeCity = {(e, value) => setFilterCity(value)}
-                onChangeTownship = { (e, value) => setFilterTownship(value)}
-                filterStatus = {filterStatus}
-                onChangefilterStatus = { () => setFilterStatus(!filterStatus)}
-                filterDelivered = {filterDelivered}
-                onChangefilterDelivered = { () => setFilterDelivered(!filterDelivered)}
-                filterCod = {filterCod}
-                onChangefilterCod = { () => setFilterCod(!filterCod)}
-                filterCash = {filterPaid}
-                onChangefilterCash = { () => setFilterPaid(!filterPaid)}
+                onChangeCity = {(e, value) => setFilterObject( prev => ({...prev, ...{city : value, city_id : value.id}})) }
+                onChangeTownship = { (e, value) => setFilterObject( prev => ({...prev, ...{township : value, township_id : value.id}})) }
+                filterStatus = {filterObject?.status}
+                onChangefilterStatus = { () => setFilterObject( prev => ({...prev, status : !prev.status}) )}
+                filterDelivered = {filterObject?.delivered}
+                onChangefilterDelivered = { () => setFilterObject( prev => ({...prev, delivered : !prev.delivered}) )}
+                filterCod = {filterObject?.cod}
+                onChangefilterCod = { () => setFilterObject( prev => ({...prev, cod : !prev.cod}) )}
+                filterCash = {filterObject?.paid}
+                onChangefilterCash = { () => setFilterObject( prev => ({...prev, paid : !prev.paid}) )}
                 onCloseDialog = { () => _onCloseDialog()}
-                onFilter = { () => _onFilter()}/>
+                onFilter = { () => _onFilter(filterObject)}/>
 
             <LeftContainer>
                 <AwbsFilterBar 
@@ -374,7 +361,7 @@ export function Tome() {
                     {RenderItemList()}
                 </ScrollListener>}
 
-                {filterMood && <ScrollListener cb={page => apiFilterCall(page)}>
+                {filterMood && <ScrollListener cb={page => apiFilterCall(filterObject, page)}>
                     {RenderItemList()}
                 </ScrollListener>}
 

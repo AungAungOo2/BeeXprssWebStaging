@@ -21,8 +21,8 @@ type FromMeItemProps = {
     items?: string | number,
     selected?: boolean,
     onCLick?: () => any,
-    onDelete: () => any,
-    onSelect: () => any,
+    onDelete?: () => any,
+    onSelect?: () => any,
     colorCode: string
 }
 export function FromMeItem(props: FromMeItemProps) {

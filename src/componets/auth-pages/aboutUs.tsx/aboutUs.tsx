@@ -17,7 +17,13 @@ export function AboutUs(){
             <CustomizedPaper containerStyle={{backgroundColor:"#fff"}}>
                     <Box display="flex" flexDirection="row">
                         <Box display="flex" flexGrow={2}></Box>
-                        <Box display="flex" flexGrow={1}><img src={logo} style={LoginStyle.responsive_img} /></Box>
+                        <Box display="flex" flexGrow={1}>
+                            <img src={logo} style={{
+                                width: "50%",
+                                height: "100%",
+                                margin: "0 auto"
+                            }} />
+                        </Box>
                         <Box display="flex" flexGrow={2}></Box>
                     </Box>
                     {/* <Box display="flex" flexDirection="row">

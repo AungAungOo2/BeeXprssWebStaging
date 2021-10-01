@@ -14,7 +14,8 @@ import {
     CHECK_DUPLICATE_PICKUP,
     DELETE_DRAFT_AWB,
     CALCULATE_DELIVERY_CHARGES_LIST,
-    CREATE_DRAFT_AWB_LIST
+    CREATE_DRAFT_AWB_LIST,
+    API_TIMEOUT
 } from "../config";
 import { loginProps } from "../types/login.types";
 import { FilterResponse, ToMeList } from "../types/tome.types";
@@ -33,9 +34,8 @@ import { CreditNoteProps } from "../types/creaditNote.types";
 const API1 = axios.create({
     baseURL: window.location.href.search("localhost") < 0 ? BASE_URL : "http://localhost:3000",
     //baseURL: BASE_URL,
-    timeout: 60000,
+    timeout: API_TIMEOUT,
 });
-
 
 const SMS_API = axios.create({
     baseURL: SMS_URL,
@@ -49,7 +49,6 @@ const SMS_API = axios.create({
 API1.interceptors.request.use(config => {
     if (config.url == LOGIN_URL || config.url == EMAIL_CHECKING_URL || config.url == FORGET_PASSWORD_URL) return config
     config.data = { ...auth.getLogin(), ...{ database: DATABASE_NAME }, ...config.data }
-    console.log("config data : ", config.data)
     return config
 });
 
@@ -63,13 +62,10 @@ API1.interceptors.response.use(res => {
 })
 
 export async function login(login: string, password: string): Promise<loginProps> {
-    console.log("data : ", login, " ,", password, ", ", DATABASE_NAME, " , ", window.location.href.search("localhost") < 0)
     try {
         const response = await API1.post(LOGIN_URL, { login, password, database: DATABASE_NAME })
-        console.log("response : ", response.data)
         return response.data.result
     } catch (error) {
-        console.log("error : ", error)
         return Promise.reject(error)
     }
 }
@@ -94,13 +90,10 @@ export type createPickUpProps = {
     items?: string | number
 }
 export async function createPickUp(props: createPickUpProps) {
-    console.log("createPickUp props : ", props)
     try {
         const response = await API1.post(CREATE_PICKUP_URL, props)
-        console.log("response createPickUp : ", response)
         return response.data.result
     } catch (error) {
-        console.log("response error createPickUp : ", error)
         return Promise.reject(error)
     }
 }
@@ -137,7 +130,6 @@ export async function fromMeFilter(data: any): Promise<SearchResponse> {
         const response = await API1.post(FROM_ME_FILTER_URL, data)
         return response.data.result
     } catch (error) {
-        console.log("error : ", error)
         return Promise.reject(error)
     }
 }
@@ -181,10 +173,8 @@ export async function getCustomerStatement(page: number): Promise<Array<Statemen
 }
 
 export async function filterStatement(data : any): Promise<Array<StatementProps>> {
-    console.log("request data : ", data)
     try {
         const response = await API1.post(STATEMENT_FILTER,  data )
-        console.log("response : ", response.data.result)
         return response.data.result
     } catch (error) {
         return Promise.reject(error)
@@ -286,12 +276,10 @@ export async function searchByName(search_number: string): Promise<FromMeList> {
 }
 
 export async function createOrderAwb(props: createAwbProps) {
-
     try {
         const response = await API1.post(CREATE_AWB_URL, props)
         return response.data.result
     } catch (error) {
-        console.log("respone in error : ", error)
         return Promise.reject(error)
     }
 }
@@ -340,7 +328,6 @@ export type cancelPickupProps = {
     reason: number | string,
 }
 export async function cancelPickup(props: cancelPickupProps) {
-    console.log("props : ", props)
     try {
         const response = await API1.post(CANCEL_PICKUP, props)
         return response.data.result
@@ -355,7 +342,6 @@ export type checkDuplicatePickupProps = {
     time_to_pick: string,
 }
 export async function checkDuplicatePickup(props: checkDuplicatePickupProps) {
-    console.log("checkDuplicatePickup props :  ", props)
     try {
         const response = await API1.post(CHECK_DUPLICATE_PICKUP, props)
         return response.data.result
@@ -389,10 +375,8 @@ export async function getDeliveryChargesList(data: ExportOrderList[]) {
 export async function createDraftAwbList(data: ExportOrderList[]) {
     try {
         const response = await API1.post(CREATE_DRAFT_AWB_LIST, { data })
-        console.log("response : ", response)
         return response.data.result
     } catch (error) {
-        console.log("error : ", error)
         return Promise.reject(error)
     }
 }

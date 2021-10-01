@@ -39,6 +39,7 @@ export interface ToMeList {
     sender_full_address: string|boolean
     sender_mobile: string
     delivered_time: string
+    delivered_date: string
     awb_created_date: string
     name: string
 }

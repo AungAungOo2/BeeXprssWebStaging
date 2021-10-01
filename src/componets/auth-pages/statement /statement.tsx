@@ -18,6 +18,7 @@ import { tabletheme } from './statement.style';
 import * as moment from 'moment'
 import { ScrollListener } from '../../listener/ScrollListen'
 import { StatementsFilter, StatementsFilterBar } from '../../Standard UI/filter/statementFilter';
+import { API_TIMEOUT } from '../../../lib/config'
 
 export interface ChipObject { 
     key : string, 
@@ -36,7 +37,8 @@ export function Statement() {
     const [total,setTotal] = React.useState<String>()
     const [filterItems, setFilterItems] = React.useState<Array<StatementProps>>([])
     const currentDate = moment().format('YYYY-MM-DD')
-    const [filterFromDate, setFilterFromDate] = React.useState<string | Date>(currentDate)
+    const firstDayOfMonth = moment().startOf('month').format('YYYY-MM-DD');
+    const [filterFromDate, setFilterFromDate] = React.useState<string | Date>(firstDayOfMonth)
     const [filterToDate, setFilterToDate] = React.useState<string | Date>(currentDate)
     const [chipList, setChipList] = React.useState<Array<ChipObject>>([])
     const [filterMood, setFilterMood] = React.useState<boolean>(false)
@@ -70,6 +72,9 @@ export function Statement() {
             }
             return Promise.resolve(results.length)
         } catch (error) {
+            if(error == "Error: timeout of "+ API_TIMEOUT +"ms exceeded"){
+                alert("Exceeded timeout, Please try agian.")
+            }
             return Promise.reject()
         } finally {
             setFilterOneTimeCall(false)

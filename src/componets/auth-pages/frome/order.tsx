@@ -125,12 +125,15 @@ export function OrderList() {
 
     const handleChange = async (e) => {
         const files = Array.from(e.target.files);
+        e.target.value = null;
         const [file] = files;
+        let messages = ""
         var importList: Array<ExportOrderList> = []
         setAttachment(file);
 
         await readXlsxFile(file).then((data) => {
-            data.map((rows) => {
+            data.map(async(rows, index : number) => {
+                
                 var data: ExportOrderList = {
                     id: rows[0],
                     sender_id: { id: 0, name: rows[1], mobile: rows[2] },
@@ -148,17 +151,27 @@ export function OrderList() {
                     payment_type_id: { id: getPaymentId(rows[13]), name: rows[13] },
                     cod_amount: rows[14],
                     delivery_charges: rows[15],
-                    goods_type: rows[16],
-                    service_priority: rows[17],
+                    // goods_type: rows[16],
+                    // service_priority: rows[17],
+                    goods_type: "Parcel",
+                    service_priority: "Regular",
                     current_status: { id: 1, name: rows[18] },
                     valid: "check"
                 }
-                importList.push(data)
+                let result = await checkData(data)
+                if(result != "success" && index > 0){
+                    let i = index + 1
+                    messages = messages + result + "in row " + i + ".\n"
+                }else {
+                    importList.push(data)
+                }
+                
             })
         })
 
-        console.log("importList.length : ", importList.length)
-        if(importList.length > 1){
+        if(messages != ""){
+            alert(messages)
+        }else if(importList.length > 1 ){
             importList.shift()
             dispatch({ ImportOrder: importList })
             history.push("/home/fromme/ImportOrder")
@@ -167,6 +180,26 @@ export function OrderList() {
         }
         
     };
+
+    const checkData = async (row : ExportOrderList) => {
+
+        if(row.sender_mobile == null || row.sender_mobile == "") return "Please input sender mobile "
+        if(row.origin_city?.id <= 0 ) return "Invalid origin city "
+        if(row.origin_twsp_id?.id <= 0 ) return "Invalid origin township "
+        if(row.receiver_name == null || row.receiver_name == "") return "Please input receiver name "
+        if(row.receiver_mobile == null || row.receiver_mobile == "") return "Please input receiver mobile "
+        if(row.dest_city?.id <= 0) return "Invalid destination city "
+        if(row.dest_twsp_id?.id <= 0) return "Invalid destination township "
+        if(row.receiver_full_address == null || row.receiver_full_address == "") return "Please input receiver full address "
+        if(row.weight <= 0) return "Weight must be greater than 0 "
+        if(row.service_type_id?.id <= 0) return "Invalid service type "
+        if(row.payment_type_id?.id <= 0) return "Invalid payment type "
+        if(row.goods_type == null || row.goods_type == "") return "Please choose goods type "
+        if(row.service_priority == null || row.service_priority == "") return "Please choose service priority "
+
+        return "success"
+
+    }
 
     const getCityId = (name: string) => {
         return getCityByName(name)?.id || 0
@@ -179,7 +212,6 @@ export function OrderList() {
     const getServiceId = (name: string) => {
         if (!services) return 0
         const service = services.find(serviceType => serviceType.name == name)
-        console.log("service?.id  : ", service?.id)
         return service?.id || 0
     }
 
@@ -250,13 +282,16 @@ export function OrderList() {
                     </Button> */}
 
                     <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 16, textTransform: "none" }}>
-                        <a href='/src/componets/res/files/beexprss_create_awbs.xlsx' download>Download Excel</a>
+                        <a href='/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx' download>Download Excel</a>
                     </Button>
 
 
                     <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 16, textTransform: "none" }}>
                         Import Excel
-                        <input type="file" hidden onChange={(e) => handleChange(e)} accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                        <input type="file" hidden 
+                            onChange={(e) => handleChange(e)} 
+                            onClick={ (e) => {e.target.files = ""}} 
+                            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
                     </Button>
 
                 </Grid>

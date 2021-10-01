@@ -22,7 +22,7 @@ export function TomeDetails(){
 
     React.useEffect(()=>{
         if(state&&!state.id) history.push("/home/tome")
-    },[])
+    }, [])
 
     if(!state || !state.id) return <div />
 
