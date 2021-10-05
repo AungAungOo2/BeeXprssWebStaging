@@ -15,7 +15,8 @@ import Button from '@material-ui/core/Button';
 import readXlsxFile from 'read-excel-file'
 import { getCityByName, getTownshipByName } from '../../../lib/storage/CityAndTownship'
 import auth from '../../../auth/auth';
-import { FaLessThanEqual } from 'react-icons/fa'
+import logo from '../../res/images/ic_beexprss.jpeg'
+import fileExcel from '../../res/files/DraftAWBImport_BeeXprss.xlsx'
 
 export function OrderList() {
 
@@ -269,7 +270,6 @@ export function OrderList() {
                     />}
                 </Grid>
 
-
                 <Grid item xs={10} container justify="flex-end" style={{ alignSelf: "center", alignItems: "center" }}>
 
                     {enablePrint && <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 8, textTransform: "none" }}>
@@ -277,20 +277,27 @@ export function OrderList() {
                         <input hidden onClick={() => handlePrint()} />
                     </Button>}
 
-                    {/* <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 16, textTransform: "none" }}>
-                        Download Excel
-                    </Button> */}
-
                     <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 16, textTransform: "none" }}>
-                        <a href='/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx' download>Download Excel</a>
+                        {/* <a href={process.env.PUBLIC_URL+'/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx'} download>Download Excel</a> */}
+                        {/* <a href={require("/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx")} download>Download Excel</a>  */}
+                        <a href={fileExcel} download>Download Excel</a>
+                        {/* <a href="../../res/files/DraftAWBImport_BeeXprss.xlsx" download>Download Excel</a> */}
+                        {/* <a href="/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx" download>Download Excel</a> */}
                     </Button>
+
+                    {/* <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 16, textTransform: "none" }}>
+                        <a href={process.env.PUBLIC_URL+'/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx'} download>Download Excel 2</a> */}
+                        {/* <a href={require("/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx")} download>Download Excel</a>  */}
+                        {/* <a href={fileExcel} download>Download Excel 2</a> */}
+                        {/* <a href="../../res/files/DraftAWBImport_BeeXprss.xlsx" download>Download Excel</a> */}
+                        {/* <a href="/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx" download>Download Excel</a> */}
+                    {/* </Button> */}
 
 
                     <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 16, textTransform: "none" }}>
                         Import Excel
                         <input type="file" hidden 
                             onChange={(e) => handleChange(e)} 
-                            onClick={ (e) => {e.target.files = ""}} 
                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
                     </Button>
 
@@ -302,29 +309,4 @@ export function OrderList() {
             </ScrollListener>
         </div>
     )
-
 }
-
-{/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open form dialog
-    </Button> */}
-
-
-
-    // new_date: "",
-                    // cash_by_last_mile: 0,
-                    // pod_remark: "",
-                    // remark: "string",
-                    // signature: "string",
-                    // recipient_mobile: "string",
-                    // cash_by_first_mile: 0,
-                    // temp_awb_number: "string",
-                    // current_depot: {id: 0, name: "string"},
-                    // receiver_id: {id: 0, name: "string"},
-                    // recipient_type: {id: 0,name: "string"},
-                    // other_cost: 0,
-                    // sender_full_address: "string",
-                    // delivered_time: "string",
-                    // awb_created_date: "string",
-                    // name: "string",
-                    // recipient_name: "string",

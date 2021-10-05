@@ -231,20 +231,20 @@ export function Home(){
                     </Grid>
                     <Grid item xs={1} />
                 </Grid>
-                    
             </HomeContainer>
-                <Box display="flex" justifyContent="center" flexDirection="row">
-                    <Box flexGrow={2} minWidth={"26.5%"}></Box>
-                    <Box flexGrow={0.8}>
-                        {
-                            promotion?.slider.img_attachment.length &&
-                            <Carousel infiniteLoop={true} autoPlay={true} showArrows={true} showThumbs={false}>
-                                {promotionImage()}
-                            </Carousel> 
-                        }
-                    </Box>
-                    <Box flexGrow={2} minWidth={"26.5%"}></Box>
+            
+            <Box display="flex" justifyContent="center" flexDirection="row">
+                <Box flexGrow={2} minWidth={"26.5%"}></Box>
+                <Box flexGrow={0.8}>
+                    {
+                        promotion?.slider.img_attachment.length &&
+                        <Carousel infiniteLoop={true} autoPlay={true} showArrows={true} showThumbs={false}>
+                            {promotionImage()}
+                        </Carousel> 
+                    }
                 </Box>
+                <Box flexGrow={2} minWidth={"26.5%"}></Box>
+            </Box>
         </Box>
         
     )

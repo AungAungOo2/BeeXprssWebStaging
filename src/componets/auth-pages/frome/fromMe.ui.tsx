@@ -35,7 +35,7 @@ export function FromMeItem(props: FromMeItemProps) {
                 <Box flexGrow={1} flexDirection="column" style={{ paddingLeft: "20px" }}>
                     <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>{props.id}</Typography>
                     <Typography>To: {props.to != false ? props.to : ""}</Typography>
-                    <Typography>Create Date: {props.create}</Typography>
+                    <Typography>Create Date: {moment(props.create).format("DD-MM-YYYY")}</Typography>
                     <Grid container spacing={0}>
                         <Grid item xs={6}>
                             <Typography><Icons size={15} name={IconKeys.tag} />  {props.amount} MMK</Typography>
@@ -93,7 +93,7 @@ export function OrderItem(props: FromMeItemProps) {
                             </Grid>
                         </Grid>
                         <Typography>To: {props.to != false ? props.to : ""}</Typography>
-                        <Typography>Township: {props.create}</Typography>
+                        <Typography>Created Date : {moment(props.create).add(6.5, "hours").format('DD-MM-YYYY hh:mm:ss')}</Typography>
                         <Grid container spacing={0}>
                             <Grid item xs={6}>
                                 <Typography><Icons size={15} name={IconKeys.tag} /> COD: {props.amount} MMK</Typography>
@@ -250,8 +250,8 @@ export function GoodsContainer(props: { description?: string, weight?: string | 
 }
 
 export function PickUpItem(props: FromMeItemProps) {
-    const create = moment(props.create).add(6.5, "hours").format('LLL')
-    const estPickup = moment(props.estPickup).add(6.5, "hours").format('LLL')
+    const create = moment(props.create).add(6.5, "hours").format('DD-MM-YYYY hh:mm:ss')
+    const estPickup = moment(props.estPickup).add(6.5, "hours").format('DD-MM-YYYY hh:mm:ss')
     return (
         <Paper elevation={2} style={{ margin: "2%", backgroundColor: Colors.THEME_PRIMARY }} onClick={props.onCLick}>
             <Box display="flex" flexDirection="row" alignItems="center" style={{ padding: "2%" }}>
@@ -310,7 +310,7 @@ export const TimeSeriesList = ({ log }: { log: Array<logs> }) => {
 export function PrintContainer(props: { order: OrdersProps }) {
     return (
         <Paper style={{ backgroundColor: Colors.WHITE, padding: 16, margin: 32 }}>
-            <Typography style={{ fontWeight: "bold", paddingLeft: 16, paddingTop: 32 }}> Create Date : {props.order.create_date} </Typography>
+            <Typography style={{ fontWeight: "bold", paddingLeft: 16, paddingTop: 32 }}> Created Date : {moment(props.order.create_date).add(6.5, "hours").format('DD-MM-YYYY hh:mm:ss')} </Typography>
             <Box display="flex" alignItems="center" flexDirection="row" style={{ padding: 10 }}>
                 <Box display="flex" flexGrow={1} alignItems="center" flexDirection="column" style={{ padding: 10 }}>
                     <img src={logo} style={{ width: 150, height: 150, margin: "0 auto" }} />

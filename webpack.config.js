@@ -63,7 +63,7 @@ module.exports = {
       },
 
       {
-        test: /\.jpe?g$|\.ico$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/,
+        test: /\.jpe?g$|\.ico$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$|\.xlsx$/,
         loader: 'file-loader?name=[name].[ext]'  // <-- retain original file name
       },
       {

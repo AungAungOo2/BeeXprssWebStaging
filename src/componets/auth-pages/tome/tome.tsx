@@ -15,7 +15,7 @@ import { API_TIMEOUT, FILTER_PAGINATION_COUNT } from '../../../lib/config'
 import { ChipObject, FilterToMeObject } from '../../../lib/types/filter.types'
 
 const data = {
-    "date_from": moment().format('YYYY-MM-DD'),
+    "date_from": moment().startOf('month').format('YYYY-MM-DD'),
     "date_to": moment().format('YYYY-MM-DD'),
     "sender_name": "",
     "sender_phone": "",
@@ -271,7 +271,9 @@ export function Tome() {
             excelDataSet.push({
                 "AWB No.": row.name,
                 "Sender Name": row.sender_id.name,
+                "Sender Phone": row.sender_mobile,
                 "Receiver Name": row.receiver_id.name,
+                "Receiver Phone": row.receiver_mobile,
                 "Origin City": row.origin_city[1],
                 "Origin Township": row.origin_twsp_id.name,
                 "Destination City": row.dest_city[1],

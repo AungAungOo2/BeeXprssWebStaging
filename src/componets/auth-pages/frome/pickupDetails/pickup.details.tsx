@@ -119,11 +119,11 @@ export function PickUpDetails(props:any){
                     </Box>
                     <Box display="flex" flexDirection="row"  style={{padding:10}}>
                         <Box style={{width:200}}><Typography><b>Create Date</b></Typography></Box>
-                        <Box><Typography align="left">{moment(Pickup.create_date).add(6.5,"hours").format('LLL')}</Typography></Box>
+                        <Box><Typography align="left">{moment(Pickup.create_date).add(6.5,"hours").format('DD-MM-YYYY hh:mm:ss')}</Typography></Box>
                     </Box>
                     <Box display="flex" flexDirection="row"  style={{padding:10}}>
                         <Box style={{width:200}}><Typography><b>Estimated Pickup Time</b></Typography></Box>
-                        <Box><Typography align="left">{moment(Pickup.time_to_pick).add(6.5,"hours").format('LLL')}</Typography></Box>
+                        <Box><Typography align="left">{moment(Pickup.time_to_pick).add(6.5,"hours").format('DD-MM-YYYY hh:mm:ss')}</Typography></Box>
                         <Text style={{marginLeft: 8, marginTop: 2 , color:Colors.THEME_SECONDARY, fontSize: 14}}>The Pickup time is considered to our courier activity.</Text>
                     </Box>
                     <Box display="flex" flexDirection="row"  style={{padding:10}}>

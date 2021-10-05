@@ -29,7 +29,7 @@ export function PrintOrder(props: any) {
                 OrderList.map(row =>
                     <Page size="A5" style={styles.page}>
                         <View style={{ marginBottom: 8 }}>
-                            <Text style={styles.fontBold}> Created Date : {row.create_date}</Text>
+                            <Text style={styles.fontBold}> Created Date : {moment(row.create_date).add(6.5, "hours").format('DD-MM-YYYY hh:mm:ss')}</Text>
                         </View>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ width: "50%", alignContent: 'center', justifyContent: 'center', alignItems: 'center' }}>

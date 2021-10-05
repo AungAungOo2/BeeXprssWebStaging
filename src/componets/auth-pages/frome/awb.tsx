@@ -14,7 +14,7 @@ import { API_TIMEOUT, FILTER_PAGINATION_COUNT } from '../../../lib/config'
 import { ChipObject, FilterFromMeObject } from '../../../lib/types/filter.types'
 
 const data = {
-    "date_from": moment().format('YYYY-MM-DD'),
+    "date_from": moment().startOf('month').format('YYYY-MM-DD'),
     "date_to": moment().format('YYYY-MM-DD'),
     "receiver_name": "",
     "receiver_phone": "",
@@ -209,7 +209,7 @@ export function AWBList() {
         let data = event.target.value
         switch (type) {
             case "name": {
-                setFilterObject( prev => ({...prev, sender_name : data}))
+                setFilterObject( prev => ({...prev, receiver_name : data}))
                 break
             }
             case "awb": {
@@ -217,7 +217,7 @@ export function AWBList() {
                 break
             }
             case "phone": {
-                setFilterObject(prev => ({...prev, sender_phone : data}))
+                setFilterObject(prev => ({...prev, receiver_phone : data}))
                 break
             }
         }
@@ -314,7 +314,7 @@ export function AWBList() {
                     }
                 }
                 filterReceiver = {filterObject?.receiver}
-                onChangefilterReceiver = { () => setFilterObject( prev => ({...prev, sender : !prev.receiver}) ) }
+                onChangefilterReceiver = { () => setFilterObject( prev => ({...prev, receiver : !prev.receiver}) ) }
                 type = {type}
                 onChangeType = { e => onChangeType(e)}
                 onChangeTypeValue = { e => onChangeTypeValue(e)}
