@@ -2,7 +2,7 @@ import * as React from 'react'
 import { FormContainer, AppContainer, LeftContainer, RightContainer } from '../../Standard UI/container/Container'
 import { TableContainer, Table, TableRow, TableHead, TableCell, TableBody, Paper, makeStyles, Grid, Typography, Divider, ThemeProvider, Link, Button } from '@material-ui/core'
 import { CustomizedPaper } from '../../Standard UI/paper/CustomizedPaper';
-import { Colors, IconColor } from '../../res/color';
+import { COLORS, Colors, IconColor } from '../../res/color';
 import { createDraftAwbList, getDeliveryChargesList } from '../../../lib/api';
 import { CustomizedLinkButton, CustomizedButton } from '../../Standard UI/button/CustomizedButton';
 import { Icons, IconKeys } from '../../Standard UI/Icon';
@@ -64,10 +64,10 @@ export function ImportOrder(props: any) {
                     <TableCell align="center">{row.service_type_id.name}</TableCell>
                     <TableCell align="center">{row.payment_type_id.name}</TableCell>
                     <TableCell align="center">{row.cod_amount}</TableCell>
-                    <TableCell align="center">{row.delivery_charges}</TableCell>
+                    <TableCell align="center" style={{color: 'blue'}}>{row.delivery_charges}</TableCell>
                     <TableCell align="center">{row.goods_type}</TableCell>
                     <TableCell align="center">{row.service_priority}</TableCell>
-                    <TableCell align="center">{row.current_status.name}</TableCell>
+                    <TableCell align="center">{row.remark}</TableCell>
                 </TableRow>
             )
             //}
@@ -198,7 +198,7 @@ export function ImportOrder(props: any) {
                             <TableCell align="center">Delivery Charges</TableCell>
                             <TableCell align="center">Goods Type</TableCell>
                             <TableCell align="center">Service Priority</TableCell>
-                            <TableCell align="center">State</TableCell>
+                            <TableCell align="center">Remark</TableCell>
 
                         </TableRow>
                     </TableHead>

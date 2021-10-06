@@ -48,7 +48,8 @@ export const getTownshipByName = (name = "") => {
     let raw = localStorage.getItem("@App")
     let data: Array<townshipProps> = [{}]
     if (raw) data = JSON.parse(raw).township
-    return data.find(row => row.name.split(" ")[1] == name)
+    //return data.find(row => row.name.split(" ")[1] == name)
+    return data.find(row => row.name.includes(name))
 }
 
 

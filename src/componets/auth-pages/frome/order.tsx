@@ -151,12 +151,12 @@ export function OrderList() {
                     service_type_id: { id: getServiceId(rows[12]), name: rows[12] },
                     payment_type_id: { id: getPaymentId(rows[13]), name: rows[13] },
                     cod_amount: rows[14],
-                    delivery_charges: rows[15],
+                    delivery_charges: 0,
                     // goods_type: rows[16],
                     // service_priority: rows[17],
                     goods_type: "Parcel",
                     service_priority: "Regular",
-                    current_status: { id: 1, name: rows[18] },
+                    remark: rows[15] || "",
                     valid: "check"
                 }
                 let result = await checkData(data)
@@ -183,6 +183,8 @@ export function OrderList() {
     };
 
     const checkData = async (row : ExportOrderList) => {
+
+        console.log("row : ", row)
 
         if(row.sender_mobile == null || row.sender_mobile == "") return "Please input sender mobile "
         if(row.origin_city?.id <= 0 ) return "Invalid origin city "
@@ -284,15 +286,6 @@ export function OrderList() {
                         {/* <a href="../../res/files/DraftAWBImport_BeeXprss.xlsx" download>Download Excel</a> */}
                         {/* <a href="/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx" download>Download Excel</a> */}
                     </Button>
-
-                    {/* <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 16, textTransform: "none" }}>
-                        <a href={process.env.PUBLIC_URL+'/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx'} download>Download Excel 2</a> */}
-                        {/* <a href={require("/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx")} download>Download Excel</a>  */}
-                        {/* <a href={fileExcel} download>Download Excel 2</a> */}
-                        {/* <a href="../../res/files/DraftAWBImport_BeeXprss.xlsx" download>Download Excel</a> */}
-                        {/* <a href="/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx" download>Download Excel</a> */}
-                    {/* </Button> */}
-
 
                     <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 16, textTransform: "none" }}>
                         Import Excel
