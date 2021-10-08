@@ -52,7 +52,7 @@ export function Statement() {
             const res=  await getCustomerStatement(page)
             
             if(res) {
-                getTotal(res)
+                getTotal(res, false)
             }
             return Promise.resolve(res.length)   
         } catch (error) {
@@ -63,12 +63,11 @@ export function Statement() {
     }
 
     const apiFilterCall = async (page = 0) => {
-        //console.log(getRequestData())
         try {
             const results = await filterStatement(getRequestData(page))
             if (results.length > 0) {
-                setFilterItems( prev => ([...prev, ...results]))
-                //setFilterItemTotalCount(results.links.item_count)
+                //setFilterItems( prev => ([...prev, ...results]))
+                getTotal(results, true)
             }
             return Promise.resolve(results.length)
         } catch (error) {
@@ -81,7 +80,7 @@ export function Statement() {
         }
     }
 
-    function getTotal(datas : Array<StatementProps>){
+    function getTotal(datas : Array<StatementProps>, isFilter : boolean){
         
         datas.map((data,index)=>{
             var net_total = 0;
@@ -93,7 +92,8 @@ export function Statement() {
             net_total =  ( total_amount + data.commission ) - net_total
             data.net_total = currencyFormat(net_total)
         })
-        setStatement([...statement,...datas])
+        if(isFilter) setFilterItems(prev => ([...prev, ...datas]))
+        else setStatement([...statement,...datas])
     }
 
     React.useEffect(()=>{

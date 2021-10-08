@@ -126,6 +126,7 @@ export async function fromMe(page: number): Promise<Array<FromMeList>> {
 }
 
 export async function fromMeFilter(data: any): Promise<SearchResponse> {
+    console.log("data : ", data)
     try {
         const response = await API1.post(FROM_ME_FILTER_URL, data)
         return response.data.result
