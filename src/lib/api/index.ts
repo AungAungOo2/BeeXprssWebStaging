@@ -202,7 +202,6 @@ export async function checkRegisterEmail(email: string) {
 }
 
 export async function sendVerificationCode(param: { mobile: string, message: string }) {
-
     try {
         const response = await API1.post(SEND_SMS, param)
         return true

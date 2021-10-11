@@ -235,10 +235,6 @@ type filterBar = {
 }
 export function AwbsFilterBar(props: filterBar) {
     props.filterMood && props.progressPercent < 100 &&  props.totalCount
-    // console.log("props.filterMood : ", props.filterMood)
-    // console.log("props.progressPercent : ", props.progressPercent)
-    // console.log("props.totalCount : ", props.totalCount)
-    // console.log("============= ")
     
     return (
         <Grid container style={{ marginBottom: 10, padding: 4, backgroundColor: "white" }} spacing={0}>
