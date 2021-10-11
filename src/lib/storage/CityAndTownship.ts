@@ -49,7 +49,8 @@ export const getTownshipByName = (name = "") => {
     let data: Array<townshipProps> = [{}]
     if (raw) data = JSON.parse(raw).township
     //return data.find(row => row.name.split(" ")[1] == name)
-    return data.find(row => row.name.includes(name))
+    //return data.find(row => row.name.includes(name))
+    return data.find(row => row.name.substring(4) == name)
 }
 
 

@@ -15,7 +15,6 @@ import Button from '@material-ui/core/Button';
 import readXlsxFile from 'read-excel-file'
 import { getCityByName, getTownshipByName } from '../../../lib/storage/CityAndTownship'
 import auth from '../../../auth/auth';
-import logo from '../../res/images/ic_beexprss.jpeg'
 import fileExcel from '../../res/files/DraftAWBImport_BeeXprss.xlsx'
 
 export function OrderList() {
@@ -183,9 +182,6 @@ export function OrderList() {
     };
 
     const checkData = async (row : ExportOrderList) => {
-
-        console.log("row : ", row)
-
         if(row.sender_mobile == null || row.sender_mobile == "") return "Please input sender mobile "
         if(row.origin_city?.id <= 0 ) return "Invalid origin city "
         if(row.origin_twsp_id?.id <= 0 ) return "Invalid origin township "
@@ -280,11 +276,7 @@ export function OrderList() {
                     </Button>}
 
                     <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 16, textTransform: "none" }}>
-                        {/* <a href={process.env.PUBLIC_URL+'/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx'} download>Download Excel</a> */}
-                        {/* <a href={require("/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx")} download>Download Excel</a>  */}
                         <a href={fileExcel} download>Download Excel</a>
-                        {/* <a href="../../res/files/DraftAWBImport_BeeXprss.xlsx" download>Download Excel</a> */}
-                        {/* <a href="/src/componets/res/files/DraftAWBImport_BeeXprss.xlsx" download>Download Excel</a> */}
                     </Button>
 
                     <Button color="primary" variant="contained" component="label" style={{ marginLeft: 8, marginRight: 16, textTransform: "none" }}>
