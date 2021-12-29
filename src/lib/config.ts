@@ -1,7 +1,7 @@
 export const API_URL = "https://api.myjson.com/bins"
 export const API_TIMEOUT = 150000
 export const FILTER_PAGINATION_COUNT = 50
-//export const BASE_URL = "http://beexpr.staging.global-connect.asia/"
+// export const BASE_URL = "http://beexpr.staging.global-connect.asia/"
 export const BASE_URL = "http://odoo.beexprss.com/"
 export const SMS_URL = "https://api.kast.ph/"
 
@@ -20,7 +20,7 @@ export const EMAIL_CHECKING_URL = "beexprss/customer/check"
 export const REGISTER_URL = "customer/register"
 export const CREATE_AWB_URL = "custom/temp_awb/create/"
 export const ORDER_LIST_URL = "custom/temp_awb/listbyuser/"
-export const DELIVERY_CHARGES_URL = "beexprss/v2/awb/delivery_charge/"
+export const AWB_DELIVERY_CHARGES_URL = "beexprss/custom/awb/delivery_charge/"
 export const GET_NAME_URL = "/beexprss/customer/info"
 export const QUOTE_URL = "custom/awb/delivery_charge/"
 export const SEARCH_URL = "custom/awb/search/"

@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 
 app.post("*",async (req,res)=>{
-    //let url = "http://beexpr.staging.global-connect.asia"+req.url
+    // let url = "http://beexpr.staging.global-connect.asia"+req.url
     let url = "http://odoo.beexprss.com"+req.url
 
     const data = req.body

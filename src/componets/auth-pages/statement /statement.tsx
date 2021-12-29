@@ -17,7 +17,7 @@ import { CreditNoteProps } from '../../../lib/types/creaditNote.types';
 import { tabletheme } from './statement.style';
 import * as moment from 'moment'
 import { ScrollListener } from '../../listener/ScrollListen'
-import { StatementsFilter, StatementsFilterBar } from '../../Standard UI/filter/statementFilter';
+import { StatementsFilter, StatementsFilterBar } from '../../Standard UI/filter/StatementFilter';
 import { API_TIMEOUT } from '../../../lib/config'
 
 export interface ChipObject { 

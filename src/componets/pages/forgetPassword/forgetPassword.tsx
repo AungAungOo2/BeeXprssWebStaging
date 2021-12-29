@@ -60,14 +60,14 @@ export function forgetPassword(){
                         <img src={logo} style={LoginStyle.responsive_img} />
                     </Box>
 
-                    <CustomizedInputs 
+                    {/* <CustomizedInputs 
                         type="text"
                         label="Email"
                         value={email}
                         disable={true}
                         containerStyle={{marginBottom:"15px"}}
                         onChange={e=>setEmail(e.target.value)}
-                    />
+                    /> */}
                     <CustomizedInputs 
                         type="text"
                         value={phone}

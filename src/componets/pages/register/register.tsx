@@ -104,7 +104,7 @@ export function registerForm(){
                     />
                     <CustomizedInputs 
                         type="text"
-                        label="Email"
+                        label="Email(Optional)"
                         containerStyle={{marginBottom:"15px"}}
                         onChange={e=>setEmail(e.target.value)}
                     />

@@ -55,9 +55,9 @@ export function Login(){
                     </Box>
                     <Box flexDirection="column" justifyContent="center" style={{padding:"10%"}}>
                         <CustomizedInputs 
-                            icon={IconKeys.username} 
+                            icon={IconKeys.phone} 
                             iconColor={IconColor.THEME_PRIMARY} 
-                            label="Email"
+                            label="09xxxxxxxxx"
                             inputId="userid"
                             type="text"
                             onChange={e=>_usernameOnChange(e.target.value)}

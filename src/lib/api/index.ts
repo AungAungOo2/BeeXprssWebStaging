@@ -3,7 +3,7 @@ import axios from "axios"
 import {
     API_URL, BASE_URL, SMS_URL, LOGIN_URL, DATABASE_NAME, CREATE_PICKUP_URL, PICKUP_LIST_URL,
     MOBILE_CHECKING_URL, REGISTER_URL, QUOTE_URL, FROM_ME_URL, TO_ME_URL, FROM_ME_FILTER_URL, TO_ME_FILTER_URL, GET_CITY_TOWNSHIP_URL,
-    GET_NAME_URL, DELIVERY_CHARGES_URL, CREATE_AWB_URL, ORDER_LIST_URL, SEARCH_URL,
+    GET_NAME_URL, AWB_DELIVERY_CHARGES_URL, CREATE_AWB_URL, ORDER_LIST_URL, SEARCH_URL,
     CHANGE_DELIVERY_INFO_URL, GET_RECORD_COUNT_URL, GET_PROMOTION_IMAGES_URL, EMAIL_CHECKING_URL,
     FORGET_PASSWORD_URL,
     SEND_SMS,
@@ -33,7 +33,7 @@ import { CreditNoteProps } from "../types/creaditNote.types";
 
 const API1 = axios.create({
     baseURL: window.location.href.search("localhost") < 0 ? BASE_URL : "http://localhost:3000",
-    //baseURL: BASE_URL,
+    // baseURL: BASE_URL,
     timeout: API_TIMEOUT,
 });
 
@@ -192,9 +192,9 @@ export async function getCreditNotes(page: number): Promise<Array<CreditNoteProp
 
 
 
-export async function checkRegisterEmail(email: string) {
+export async function checkRegisterEmail(phone: string) {
     try {
-        const response = await API1.post(EMAIL_CHECKING_URL, { email })
+        const response = await API1.post(EMAIL_CHECKING_URL, { phone })
         return response.data.result
     } catch (error) {
         return Promise.reject(error)
@@ -229,6 +229,7 @@ export type getDeliveryChargesProps = {
     weight: number,
 }
 export async function getDeliveryCharges(props: getDeliveryChargesProps) {
+    console.log("TEST getDeliveryCharges ==> " + API1.post(QUOTE_URL, props))
     try {
         const response = await API1.post(QUOTE_URL, props)
         return response.data.result
@@ -246,8 +247,9 @@ export type getOrderDeliveryChargesProps = {
     goods_type: string,
 }
 export async function getOrderDeliveryCharges(props: getOrderDeliveryChargesProps) {
+    console.log("TEST getOrderDeliveryCharges ==> ", props)
     try {
-        const response = await API1.post(DELIVERY_CHARGES_URL, props)
+        const response = await API1.post(AWB_DELIVERY_CHARGES_URL, props)
         return response.data.result
     } catch (error) {
         return Promise.reject(error)

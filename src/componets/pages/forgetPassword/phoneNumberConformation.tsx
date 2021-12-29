@@ -23,13 +23,13 @@ export function EmailConformation(){
 
     const _onSubmit = async () =>{
         if(!email) {
-            alert("Invalid Email Address")
+            alert("Invalid Phone Number")
             return
         }
         try {
             const data = await checkRegisterEmail(email)
             if(!data || !data.mobile){
-                alert("This email has not account!")
+                alert("This phone number has not account!")
                 return
             }
             const verificationCode = VerifyCode.generateVerifyCode(data.mobile,email,data.id)
@@ -52,7 +52,7 @@ export function EmailConformation(){
                     <CustomizedInputs 
                         type="text"
                         value={email}
-                        label="User Email"
+                        label="09xxxxxxxxxxx"
                         onChange={e=>setEmail(e.target.value)}
                         onEnter={()=>_onSubmit()}
                         containerStyle={{marginBottom:10}}

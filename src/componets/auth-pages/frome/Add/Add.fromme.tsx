@@ -102,10 +102,10 @@ export function FromMeAdd(){
                 uid:state.user_data.id,
                 weight,
                 service_priority:priority,
-                goods_type:selectedValue,
-                service_type_id:getServiceId(),
                 dest_twsp_id:selectReceiverTownship?.id,
-                origin_twsp_id:selectedTownship?.id
+                origin_twsp_id:selectedTownship?.id,
+                service_type_id:getServiceId(),
+                goods_type:selectedValue,
             })
 
             setDeliCharge(response)

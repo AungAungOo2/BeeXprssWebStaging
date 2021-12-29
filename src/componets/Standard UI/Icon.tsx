@@ -28,6 +28,7 @@ import {
     FaFilter,
     FaSignInAlt,
     FaSignOutAlt,
+    FaPhoneAlt
 } from 'react-icons/fa'
 import {
     AiOutlineLogout ,
@@ -71,6 +72,7 @@ import { IconColor } from '../res/color';
 
 const IconObj = {
     FaPhone,
+    FaPhoneAlt,
     FaPen,
     FaChrome ,
     FaCalendar ,
@@ -156,7 +158,7 @@ export enum IconKeys {
     tag = "FaTag",
     calender ="FaCalendar",
     send="MdSend",
-    phone="FaPhone",
+    phone="FaPhoneAlt",
     reference="BsBook",
     trash="BsTrash",
     cancel="BsXSquareFill",

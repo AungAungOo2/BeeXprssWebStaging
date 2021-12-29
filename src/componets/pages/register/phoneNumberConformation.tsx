@@ -106,7 +106,7 @@ export function PhoneNumberConformation(){
                         inputId="regPhone"
                         label="Phone Number"
                         onChange={e=>setPhone(e.target.value)}
-                        startAdornment="+95"
+                        // startAdornment="+95"
                         onEnter={()=>_onSubmit()}
                     />
                     
