@@ -38,10 +38,10 @@ export function registerForm(){
             alert("User name is empty")
             return
         }
-        if(!email) {
-            alert("Email is empty")
-            return
-        }
+        // if(!email) {
+        //     alert("Email is empty")
+        //     return
+        // }
         if(!password) {
             alert("Password is empty")
             return
@@ -78,7 +78,7 @@ export function registerForm(){
                 password,
                 township_id:township.id
             })
-            const userData:AuthContext = {...data,...{login:email,password}}
+            const userData:AuthContext = {...data,...{login:phone,password}}
             Auth.login(userData,()=>{
                 history.push("/home/dashboard")
             })
