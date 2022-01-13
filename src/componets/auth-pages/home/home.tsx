@@ -233,7 +233,7 @@ export function Home(){
                 </Grid>
             </HomeContainer>
             
-            <Box display="flex" justifyContent="center" flexDirection="row">
+            {/* <Box display="flex" justifyContent="center" flexDirection="row">
                 <Box flexGrow={2} minWidth={"26.5%"}></Box>
                 <Box flexGrow={0.8}>
                     {
@@ -244,7 +244,8 @@ export function Home(){
                     }
                 </Box>
                 <Box flexGrow={2} minWidth={"26.5%"}></Box>
-            </Box>
+            </Box> */}
+
         </Box>
         
     )
