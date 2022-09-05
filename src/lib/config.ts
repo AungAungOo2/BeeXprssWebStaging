@@ -1,17 +1,18 @@
 export const API_URL = "https://api.myjson.com/bins"
 export const API_TIMEOUT = 150000
 export const FILTER_PAGINATION_COUNT = 50
-// export const BASE_URL = "http://beexpr.staging.global-connect.asia/"
-export const BASE_URL = "http://odoo.beexprss.com/"
+export const BASE_URL = "http://beexpr.staging.global-connect.asia/"
+// export const BASE_URL = "http://odoo.beexprss.com/"
 export const SMS_URL = "https://api.kast.ph/"
 
-export const DATABASE_NAME = "beexprss"
+export const DATABASE_NAME = "BeeXprssJuly8"
 
 export const LOGIN_URL = "customer/login/"
 export const GET_CITY_TOWNSHIP_URL = "customer/city_township/"
 export const FROM_ME_URL = "custom/awb/from_me/"
+export const DETAIL_URL = "custom/awb/detail/"
 export const TO_ME_URL = "custom/awb/to_me/"
-export const FROM_ME_FILTER_URL = "custom/awb/from_me/search"
+export const AWB_FILTER_URL = "custom/awb/search/detail"
 export const TO_ME_FILTER_URL = "custom/awb/to_me/search"
 export const CREATE_PICKUP_URL = "custom/pickup/create"
 export const PICKUP_LIST_URL = "custom/pickup/list"
@@ -37,3 +38,4 @@ export const CHECK_DUPLICATE_PICKUP = "custom/pickup/is_duplicate"
 export const DELETE_DRAFT_AWB = "custom/temp_awb/delete/"
 export const CALCULATE_DELIVERY_CHARGES_LIST = "/custom/awb/delivery_charges/"
 export const CREATE_DRAFT_AWB_LIST = "/custom/temp_awbs/create/"
+export const GET_LOG_URL = "custom/awb/log/detail"

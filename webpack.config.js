@@ -21,9 +21,9 @@ if(process.env.npm_lifecycle_event=="build") {
 
 module.exports = {
 
-  mode: "producation",
+  mode: "production",
 
-  entry,
+  entry: './src/index.tsx',
 
   // and output it into /dist as bundle.js
   output: {

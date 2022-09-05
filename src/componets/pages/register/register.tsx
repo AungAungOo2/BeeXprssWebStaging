@@ -60,7 +60,7 @@ export function registerForm(){
         }
         if(confirmPassword != password) {
             alert("Password do not match")
-            return 
+            return
         }
 
         try {
@@ -96,19 +96,19 @@ export function registerForm(){
                         <img src={logo} style={LoginStyle.responsive_img} />
                     </Box>
 
-                    <CustomizedInputs 
+                    <CustomizedInputs
                         type="text"
                         label="Name"
                         containerStyle={{marginBottom:"15px"}}
                         onChange={e=>setName(e.target.value)}
                     />
-                    <CustomizedInputs 
+                    <CustomizedInputs
                         type="text"
                         label="Email(Optional)"
                         containerStyle={{marginBottom:"15px"}}
                         onChange={e=>setEmail(e.target.value)}
                     />
-                    <CustomizedInputs 
+                    <CustomizedInputs
                         type="text"
                         value={phone}
                         label="Phone Number"
@@ -116,78 +116,78 @@ export function registerForm(){
                         containerStyle={{marginBottom:"15px"}}
                         onChange={e=>setPhone(e.target.value)}
                     />
-                    <CustomizedInputs 
+                    <CustomizedInputs
                         type="password"
                         label="Password"
                         containerStyle={{marginBottom:"15px"}}
                         onChange={e=>setPassword(e.target.value)}
                     />
 
-                    <CustomizedInputs 
+                    <CustomizedInputs
                         type="password"
                         label="Confirm Password"
                         containerStyle={{marginBottom:"15px"}}
                         onChange={e=>setConfirmPassword(e.target.value)}
                     />
 
-                    <Grid container spacing={0} alignItems="flex-end">    
+                    <Grid container spacing={0} alignItems="flex-end">
                         <Grid item xs={1}/>
                         <Grid item xs={11}>
-                            <CustomizedAutoCompleteBox 
+                            <CustomizedAutoCompleteBox
                                 options={getCity()}
-                                label="City" 
+                                label="City"
                                 value={city}
                                 getOptionLabel={(option:cityProps)=>option.name}
-                                onChange={(e,value)=>{setCity(value)}} 
+                                onChange={(e,value)=>{setCity(value)}}
                                 style={{width:"90%"}}
                             />
                         </Grid>
                      </Grid>
 
 
-                     <Grid container spacing={0} alignItems="flex-end">    
+                     <Grid container spacing={0} alignItems="flex-end">
                         <Grid item xs={1}/>
                         <Grid item xs={11}>
-                            {city&&<CustomizedAutoCompleteBox 
+                            {city&&<CustomizedAutoCompleteBox
                                 options={getTownshipByCityId(city?.id)}
                                 label="Township"
-                                value={township} 
+                                value={township}
                                 getOptionLabel={(option:townshipProps)=>option.name.slice(3)}
-                                onChange={(e,value)=>setTownship(value)} 
+                                onChange={(e,value)=>setTownship(value)}
                                 style={{width:"90%"}}
                             />}
                         </Grid>
-                     </Grid> 
+                     </Grid>
 
-                     <Grid container spacing={0} alignItems="flex-end">    
+                     <Grid container spacing={0} alignItems="flex-end">
                         <Grid item xs={1}/>
                         <Grid item xs={11}>
-                            <TextareaAutosize 
-                                style={{width:"90%",fontSize:14}} 
-                                aria-label="minimum height" 
+                            <TextareaAutosize
+                                style={{width:"90%",fontSize:14}}
+                                aria-label="minimum height"
                                 rowsMin={3}
-                                value={address} 
-                                placeholder="Address" 
+                                value={address}
+                                placeholder="Address"
                                 onChange={e=>setAddress(e.target.value)}
                             />
                         </Grid>
-                     </Grid>  
+                     </Grid>
 
-                    
-                    
+
+
                     <Box display="flex" justifyContent="center">
-                            <CustomizedButton 
+                            <CustomizedButton
                                 onClick={()=>apiCall()}
                                 containerStyle={{paddingLeft:"40px",paddingRight:"40px"}}
                                 color={IconColor.DARK_GREY}
-                                label="Register" 
+                                label="Register"
                                 icon={IconKeys.send}
-                                buttonColor={Colors.THEME_PRIMARY}  
-                            /> 
+                                buttonColor={Colors.THEME_PRIMARY}
+                            />
                     </Box>
                 </Paper>
             </Container>
         </Container>
     )
-    
+
 }

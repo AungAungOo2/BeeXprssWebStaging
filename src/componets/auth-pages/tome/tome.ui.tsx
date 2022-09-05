@@ -15,7 +15,7 @@ type ToMeItemProps = {
     onClick: Function,
     colorCode: string
 }
-export function ToMeItem(props: ToMeItemProps) {
+export function ToMeItem(props: any) {
     return (
         <Paper elevation={2} style={{ margin: "2%", backgroundColor: Colors.THEME_PRIMARY }} onClick={() => props.onClick()}>
             <Box display="flex" flexDirection="row" alignItems="center" style={{ padding: "2%" }}>

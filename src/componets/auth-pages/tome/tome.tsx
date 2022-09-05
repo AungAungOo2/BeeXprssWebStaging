@@ -63,10 +63,10 @@ export function Tome() {
             setBackFilter(filtered)
         }else {
             apiCall()
-        }  
-    }, [])   
-    
-    
+        }
+    }, [])
+
+
     const setBackFilter = async (data : any) => {
         _onFilter(data)
     }
@@ -147,18 +147,18 @@ export function Tome() {
         let list: Array<JSX.Element> = []
         let data = filterMood ? filterItems : items
         let firstTime = filterMood ? filterOneTimeCall : oneTimeCall
-        data.map((row, index) => {
+        data.map((row:any, index) => {
             list.push(
                 <ToMeItem
                     key={index}
                     id={row.name}
-                    amount={row.delivery_charges}
+                    amount={row.cash_by_last_mile}
                     create={row.awb_created_date}
-                    from={row.sender_id.name}
+                    from={row.sender_id[1].split(']')[1]}
                     no={index + 1}
-                    status={row.current_status.name.split("]")[1]}
+                    status={row.current_status[1].split("]")[1]}
                     onClick={() => onClick(row)}
-                    colorCode={row.current_status.name.split("]")[0].replace("[", "").trim()}
+                    colorCode={row.current_status[1].split("]")[0].replace("[", "").trim()}
                 />
             )
         })
@@ -172,7 +172,7 @@ export function Tome() {
         setOpenFilter(false)
     }
 
-    const _onFilter = async (filterObject : FilterToMeObject) => { 
+    const _onFilter = async (filterObject : FilterToMeObject) => {
         setFilterMood(true)
 
         await setChipList([])
@@ -245,7 +245,7 @@ export function Tome() {
 
     const getRequestData = (data : FilterToMeObject, page : number) => {
         return {
-            ...data, 
+            ...data,
             ...{
                 "sender": data.sender ? "True" : "False",
                 "status": data.status ? "True" : "False",
@@ -297,7 +297,7 @@ export function Tome() {
 
     return (
         <AppContainer>
-            <AwbsFilter 
+            <AwbsFilter
                 searchType="tome"
                 openFilter = {openFilter}
                 title = "Filter To Me"
@@ -334,9 +334,9 @@ export function Tome() {
                 onFilter = { () => _onFilter(filterObject)}/>
 
             <LeftContainer>
-                <AwbsFilterBar 
+                <AwbsFilterBar
                     sheetName={"ToMe"}
-                    renderChipList = { () => renderChipList()} 
+                    renderChipList = { () => renderChipList()}
                     filterMood = {filterMood}
                     count= {printItems.length}
                     progress={progress}

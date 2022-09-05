@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { IconType } from 'react-icons/lib/cjs';
-// import * as IconObj from "react-icons/all" 
+// import * as IconObj from "react-icons/all"
 import {
     FaPhone ,
     FaPen ,
@@ -28,7 +28,8 @@ import {
     FaFilter,
     FaSignInAlt,
     FaSignOutAlt,
-    FaPhoneAlt
+    FaPhoneAlt,
+    FaListUl,
 } from 'react-icons/fa'
 import {
     AiOutlineLogout ,
@@ -123,7 +124,9 @@ const IconObj = {
     FaAddressCard,
     FaFilter,
     FaSignInAlt,
-    FaSignOutAlt
+    FaSignOutAlt,
+    FaListUl,
+
 }
 export enum IconKeys {
     FaAddressCard = "FaAddressCard",
@@ -178,7 +181,8 @@ export enum IconKeys {
     awbList = "MdMoveToInbox",
     emptyIcon = "MdSentimentDissatisfied",
     orderList = "FaList",
-    filter = "FaFilter"
+    filter = "FaFilter",
+    log ="FaListUl"
 }
 
 type params = {

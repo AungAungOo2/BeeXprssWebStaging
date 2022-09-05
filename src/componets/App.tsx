@@ -17,6 +17,7 @@ import { registerForm } from './pages/register/register';
 import { EmailConformation } from './pages/forgetPassword/phoneNumberConformation';
 import { forgetpasswordConfirmVerificationCode } from './pages/forgetPassword/confirmVerificationCoder';
 import { forgetPassword } from './pages/forgetPassword/forgetPassword';
+import {AWBDetails} from "./auth-pages/frome/awbDetails/awb.details";
 
 
 class App extends React.Component<any,any>{
@@ -28,7 +29,7 @@ class App extends React.Component<any,any>{
 			alert(error.message)
 		})
 	}
- 
+
 	render() {
 		return (
 			<AuthProvider>

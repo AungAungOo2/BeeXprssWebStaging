@@ -62,8 +62,8 @@ export function AWBList() {
             setBackFilter(filtered)
         }else {
             apiCall()
-        }  
-    }, [])   
+        }
+    }, [])
 
     const setBackFilter = async (data : any) => {
         _onFilter(data)
@@ -132,30 +132,34 @@ export function AWBList() {
         }
     }
 
-    const onClick = (param: FromMeList) => {
+    const onClick = (param: any) => {
+        console.log("This is params",param.id)
         if(filterMood){
             window.sessionStorage.setItem("@filterFromMe", JSON.stringify(filterObject))
+        }else {
+            console.log("Filter is not mood")
         }
         dispatch({ FromMeList: param })
-        history.push("/home/fromme/AWBDetails")
+        history.push(`/home/fromme/AWBDetails/`)
+        console.log("This is params",param.id)
     }
 
     const RenderItemList = () => {
         let list: Array<JSX.Element> = []
-        let data = filterMood ? filterItems : items
+        let data =  items
         let firstTime = filterMood ? filterOneTimeCall : oneTimeCall
         data.map((row, index) => {
             list.push(
                 <FromMeItem
                     key={`fromme+ ${index}`}
                     id={row.name}
-                    amount={row.delivery_charges}
+                    amount={row.cash_by_last_mile}
                     create={row.awb_created_date}
-                    to={row.receiver_id.name}
+                    to={row.receiver_id[1].split(']')[1]}
                     no={index + 1}
-                    status={row.current_status.name.split("]")[1]}
+                    status={row.current_status[1].split("]")[1]}
                     onCLick={() => onClick(row)}
-                    colorCode={row.current_status.name.split("]")[0].replace("[", "").trim()}
+                    colorCode={row.current_status[1].split("]")[0].replace("[", "").trim()}
                 />
             )
         })
@@ -169,7 +173,7 @@ export function AWBList() {
         setOpenFilter(false)
     }
 
-    const _onFilter = async (filterObject : FilterFromMeObject) => {
+    const _onFilter = async (filterObject : any) => {
         setFilterMood(true)
 
         await setChipList([])
@@ -203,7 +207,7 @@ export function AWBList() {
         setType(e.target.value)
         setFilterObject( prev => ({ ...prev, ...{ sender_name : "", awb_no : "", sender_phone: "", city_id : 0, township_id : 0, city : {} as cityProps, township : {} as townshipProps}}))
     }
-    
+
     const onChangeTypeValue = (event: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
         setValueType(event.target.value)
         let data = event.target.value
@@ -240,16 +244,14 @@ export function AWBList() {
         return list
     }
 
-    const getRequestData = (data : FilterFromMeObject, page : number) => {
+    const getRequestData = (data : any, page : number) => {
         return {
-            ...data, 
+            ...data,
             ...{
-                "receiver": data.receiver ? "True" : "False",
-                "status": data.status ? "True" : "False",
-                "cod": data.cod ? "True" : "False",
-                "delivered": data.delivered ? "True" : "False",
-                "received": data.received ? "True" : "False",
-                "page": page
+                login: "09784605536",
+                password: "250911",
+                awb_no: "1740188OIC",
+                awb_create_date: "2022-08-30"
             }
         }
     }
@@ -296,7 +298,7 @@ export function AWBList() {
     return (
 
         <div>
-            <AwbsFilter 
+            <AwbsFilter
                 searchType="fromme"
                 openFilter={openFilter}
                 title="Filter From Me"

@@ -11,14 +11,8 @@ export interface FromMeList {
     service_priority: string,
     description: string,
     service_type_id: { id: 3, name: string },
-    log?: [{
-        updated_on: string,
-        id: number,
-        status: string,
-        message: string,
-        depot: string,
-    }]
-    sender_id: { id: 95831, name: string }
+    log?: any
+    sender_id: any
     receiver_full_address: string
     receiver_mobile: string
     weight: 1
@@ -29,8 +23,8 @@ export interface FromMeList {
     dest_city: [63, string]
     temp_awb_number: string
     current_depot: { id: number, name: string }
-    current_status: { id: number, name: string }
-    receiver_id: { id: number, name: string }
+    current_status: any
+    receiver_id: any
     cod_amount: number
     recipient_type: { id: number, name: string }
     payment_type_id: { id: number, name: string }
@@ -45,7 +39,7 @@ export interface FromMeList {
     senderFullAddress?: string,
     receiverFullAddress?: string,
     receiver_name?: string,
-    last_mile_pic_id?: [string, string, string]
+    last_mile_pic_id?: any
 }
 
 export interface logs {

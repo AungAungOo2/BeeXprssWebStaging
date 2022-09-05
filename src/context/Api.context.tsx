@@ -25,9 +25,9 @@ const authContext = React.createContext<[AuthContext,React.Dispatch<AuthContext>
                                     ([AUTH_CONTEXT_DEAFULT,()=>{}])
 
 export function AuthProvider(props:any) {
-    const state = React.useState(AUTH_CONTEXT_DEAFULT);
+    const states = React.useState(AUTH_CONTEXT_DEAFULT);
     return (
-        <authContext.Provider value={state}>
+        <authContext.Provider value={states}>
             {props.children}
         </authContext.Provider>
     )

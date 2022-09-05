@@ -7,7 +7,7 @@ import { Colors } from '../../../res/color';
 import { logs } from '../../../../lib/types/fromme.types';
 import * as moment from 'moment';
 
-export function QrCodeContainer(props:ToMeList){
+export function QrCodeContainer(props:any){
     return(
         <Box display="flex"  alignItems="center" flexDirection="row">
                 <Box style={{paddingTop: "2%"}}>
@@ -18,14 +18,14 @@ export function QrCodeContainer(props:ToMeList){
                         <Typography variant="h4" component="h4">{props.name} </Typography>
                     </Box>
                     <Box>
-                        <Typography variant="h6" component="h6">{props.current_status.name.split('] ')[1]}</Typography>
+                        <Typography variant="h6" component="h6">{props.current_status[1].split('] ')[1]}</Typography>
                     </Box>
                 </Box>
         </Box>
     )
 }
 
-export function SenderContainer(props:ToMeList){
+export function SenderContainer(props:any){
     return(
         <Paper style={{backgroundColor:Colors.THEME_PRIMARY}}>
             <Box display="flex"  alignItems="center" flexDirection="row" style={{marginTop: 30,padding:10}}>
@@ -35,8 +35,8 @@ export function SenderContainer(props:ToMeList){
                 </Box>
                 <Divider orientation="vertical" flexItem/>
                 <Box style={{padding: 20}} >
-                    <Typography>{props.sender_id.name||""}</Typography>
-                    <Typography>{props.sender_mobile}</Typography>
+                    <Typography>{props.sender_id[1].split("]")[1]||""}</Typography>
+                    <Typography>{props.sender_id[1].split("]")[0].split("[")[1]}</Typography>
                     <Typography>{props.sender_full_address}</Typography>
                 </Box>
             </Box>
@@ -44,7 +44,7 @@ export function SenderContainer(props:ToMeList){
     )
 }
 
-export function ReceiverContainer(props:ToMeList){
+export function ReceiverContainer(props:any){
     return(
         <Paper style={{backgroundColor:Colors.THEME_PRIMARY}}>
             <Box display="flex"  alignItems="center" flexDirection="row" style={{marginTop: 30,padding:10}}>
@@ -54,8 +54,8 @@ export function ReceiverContainer(props:ToMeList){
                 </Box>
                 <Divider orientation="vertical" flexItem/>
                 <Box style={{padding: 20}} >
-                    <Typography>{props.receiver_id.name||""}</Typography>
-                    <Typography>{props.receiver_mobile}</Typography>
+                    <Typography>{props.receiver_id[1].split("]")[1]||""}</Typography>
+                    <Typography>{props.receiver_id[1].split("]")[0].split("[")[1]}</Typography>
                     <Typography>{props.receiver_full_address}</Typography>
                 </Box>
             </Box>
@@ -63,7 +63,7 @@ export function ReceiverContainer(props:ToMeList){
     )
 }
 
-export function CourierContainer(props:ToMeList){
+export function CourierContainer(props:any){
     return(
         <Paper style={{backgroundColor:Colors.THEME_PRIMARY}}>
             <Box display="flex"  alignItems="center" flexDirection="row" style={{marginTop: 30,padding:10}}>
@@ -82,7 +82,7 @@ export function CourierContainer(props:ToMeList){
 }
 
 
-export function TypesContainer(props:ToMeList){
+export function TypesContainer(props:any){
     return(
         <Paper style={{backgroundColor:Colors.THEME_PRIMARY}}>
             <Box display="flex"  alignItems="center" flexDirection="row" style={{marginTop: 30,padding:10}}>
@@ -92,19 +92,19 @@ export function TypesContainer(props:ToMeList){
                 </Box>
                 <Box display="flex" flexGrow={1} alignItems="center" flexDirection="column"  style={{padding: 10}}>
                     <Typography>Service Type</Typography>
-                    <Typography style={{fontWeight:"bold"}}>{props.service_type_id.name}</Typography>
+                    <Typography style={{fontWeight:"bold"}}>{props.service_type_id[1]}</Typography>
                 </Box>
                 <Box display="flex" flexGrow={1} alignItems="center" flexDirection="column"  style={{padding: 10}}>
                     <Typography>Payment Type</Typography>
-                    <Typography style={{fontWeight:"bold"}}>{props.payment_type_id.name}</Typography>
+                    <Typography style={{fontWeight:"bold"}}>{props.payment_type_id[1]}</Typography>
                 </Box>
-        
+
             </Box>
         </Paper>
     )
 }
 
-export function CostContainer(props:ToMeList){
+export function CostContainer(props:any){
     return(
         <Paper style={{backgroundColor:Colors.THEME_PRIMARY,marginTop:30}}>
             <Box display="flex"  alignItems="center" flexDirection="row" style={{padding:10}}>
@@ -125,7 +125,7 @@ export function CostContainer(props:ToMeList){
                 <Box display="flex" flexGrow={1} alignItems="center" flexDirection="column"  style={{padding: 10}}>
                     <Typography color={"secondary"}>To Pay</Typography>
                     <Typography color={"secondary"} style={{fontWeight:"bold"}}>
-                        { props.payment_type_id.name == "Receiver Pay" ? 
+                        { props.payment_type_id.name == "Receiver Pay" ?
                           props.delivery_charges + props.cod_amount + props.other_cost : props.cod_amount
                         } MMK
                     </Typography>
@@ -136,7 +136,7 @@ export function CostContainer(props:ToMeList){
 }
 
 
-export function DescriptionContainer(props:ToMeList){
+export function DescriptionContainer(props:any){
     return(
         <Paper style={{backgroundColor:Colors.THEME_PRIMARY,marginTop:30}}>
             <Box display="flex"  alignItems="center" flexDirection="row" style={{padding:10}}>
@@ -167,7 +167,7 @@ export const timeSeriesList = (logs:Array<toMeLogs>) =>{
                 <Typography>
                     {  moment(row.updated_on).format("LLL") + "   "}
                     <strong>
-                        { 
+                        {
                             (row.message == "Arrived at") ? row.message +" "+ row.depot : (row.message == "On Transport from") ? row.message +" "+ row.depot : row.message
                         }
                     </strong>

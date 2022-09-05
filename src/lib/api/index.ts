@@ -1,10 +1,30 @@
 
 import axios from "axios"
 import {
-    API_URL, BASE_URL, SMS_URL, LOGIN_URL, DATABASE_NAME, CREATE_PICKUP_URL, PICKUP_LIST_URL,
-    MOBILE_CHECKING_URL, REGISTER_URL, QUOTE_URL, FROM_ME_URL, TO_ME_URL, FROM_ME_FILTER_URL, TO_ME_FILTER_URL, GET_CITY_TOWNSHIP_URL,
-    GET_NAME_URL, AWB_DELIVERY_CHARGES_URL, CREATE_AWB_URL, ORDER_LIST_URL, SEARCH_URL,
-    CHANGE_DELIVERY_INFO_URL, GET_RECORD_COUNT_URL, GET_PROMOTION_IMAGES_URL, EMAIL_CHECKING_URL,
+    API_URL,
+    BASE_URL,
+    SMS_URL,
+    LOGIN_URL,
+    DATABASE_NAME,
+    CREATE_PICKUP_URL,
+    PICKUP_LIST_URL,
+    MOBILE_CHECKING_URL,
+    REGISTER_URL,
+    QUOTE_URL,
+    FROM_ME_URL,
+    TO_ME_URL,
+    FROM_ME_FILTER_URL,
+    TO_ME_FILTER_URL,
+    GET_CITY_TOWNSHIP_URL,
+    GET_NAME_URL,
+    AWB_DELIVERY_CHARGES_URL,
+    CREATE_AWB_URL,
+    ORDER_LIST_URL,
+    SEARCH_URL,
+    CHANGE_DELIVERY_INFO_URL,
+    GET_RECORD_COUNT_URL,
+    GET_PROMOTION_IMAGES_URL,
+    EMAIL_CHECKING_URL,
     FORGET_PASSWORD_URL,
     SEND_SMS,
     GET_CUSTOMER_STATEMENT,
@@ -15,7 +35,8 @@ import {
     DELETE_DRAFT_AWB,
     CALCULATE_DELIVERY_CHARGES_LIST,
     CREATE_DRAFT_AWB_LIST,
-    API_TIMEOUT
+    API_TIMEOUT,
+    DETAIL_URL, GET_LOG_URL, AWB_FILTER_URL
 } from "../config";
 import { loginProps } from "../types/login.types";
 import { FilterResponse, ToMeList } from "../types/tome.types";
@@ -29,7 +50,8 @@ import { StatementProps } from "../types/statement.type";
 import Axios from "axios";
 import { createAwbProps } from "../types/awb.types";
 import { CreditNoteProps } from "../types/creaditNote.types";
-
+import * as React from "react";
+import {Alert} from "@material-ui/lab";
 
 const API1 = axios.create({
     baseURL: window.location.href.search("localhost") < 0 ? BASE_URL : "http://localhost:3000",
@@ -125,9 +147,18 @@ export async function fromMe(page: number): Promise<Array<FromMeList>> {
     }
 }
 
+export async function fromMeDetail(id:number) {
+    try {
+        const response = await API1.post(DETAIL_URL, { page:0,id })
+        return response.data.result
+    } catch (error) {
+        return Promise.reject(error)
+    }
+}
+
 export async function fromMeFilter(data: any): Promise<SearchResponse> {
     try {
-        const response = await API1.post(FROM_ME_FILTER_URL, data)
+        const response = await API1.post(AWB_FILTER_URL, data)
         return response.data.result
     } catch (error) {
         return Promise.reject(error)
@@ -379,5 +410,22 @@ export async function createDraftAwbList(data: ExportOrderList[]) {
         return response.data.result
     } catch (error) {
         return Promise.reject(error)
+    }
+}
+
+export async function getLog(name:any){
+
+    try {
+        const response = await API1.post(GET_LOG_URL,
+            {
+                name: name,
+            })
+        console.log("respones is -> ", response.data.result)
+        if(response.data.error ) throw Error(response.data.error.data.message)
+        return response.data.result
+    } catch (error) {
+        // @ts-ignore
+        Alert.alert("Odoo Server Error", error.message)
+        return false
     }
 }

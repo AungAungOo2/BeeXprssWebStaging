@@ -3,7 +3,7 @@ const express = require("express")
 const app = express()
 const port = 3000
 const cors = require("cors")
-var colors = require('colors') 
+var colors = require('colors')
 var bodyParser = require('body-parser')
 
 app.use(cors())
@@ -14,11 +14,11 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 
 app.post("*",async (req,res)=>{
-    // let url = "http://beexpr.staging.global-connect.asia"+req.url
-    let url = "http://odoo.beexprss.com"+req.url
+    let url = "http://beexpr.staging.global-connect.asia"+req.url
+    // let url = "http://odoo.beexprss.com"+req.url
 
     const data = req.body
-    
+
     Axios.default.post(url,data)
     .then(data=>{
         // if(data.data.result.error) return res.status(400).send(data.data)

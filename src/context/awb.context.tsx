@@ -1,22 +1,22 @@
 import * as React from 'react'
 import { ExportOrderList, FromMeList, OrdersProps, PickupProps } from '../lib/types/fromme.types'
 
-export type FrommeContextProps = {
-    FromMeList?: FromMeList,
-    Order?: OrdersProps,
-    Pickup?: PickupProps,
-    OrderList?: Array<OrdersProps>,
-    ImportOrder?: Array<ExportOrderList>,
-}
+// export type FrommeContextProps = {
+//     FromMeList?: any,
+//     Order?: OrdersProps,
+//     Pickup?: PickupProps,
+//     OrderList?: Array<OrdersProps>,
+//     ImportOrder?: Array<ExportOrderList>,
+// }
 
-const CONTEXT_DEAFULT: FrommeContextProps | any = {}
+const CONTEXT_DEAFULT: any | any = {}
 
-const reducer = (state: FrommeContextProps, action: string) => {
+const reducer = (state: any, action: string) => {
     return state
 }
 
 
-const frommeContext = React.createContext<[FrommeContextProps, React.Dispatch<FrommeContextProps>]>
+const frommeContext = React.createContext<[any, React.Dispatch<any>]>
     ([CONTEXT_DEAFULT, () => { }])
 
 export function FromMeProvider(props: any) {

@@ -8,6 +8,7 @@ import { CustomizedPaper } from '../../Standard UI/paper/CustomizedPaper'
 import { FromMeList, OrdersProps, logs } from '../../../lib/types/fromme.types'
 import { QRCode } from 'react-qrcode-logo'
 import logo from '../../res/images/ic_beexprss.jpeg'
+import {useEffect, useState} from "react";
 
 type FromMeItemProps = {
     no: string | number,
@@ -15,8 +16,8 @@ type FromMeItemProps = {
     from?: number | string | boolean,
     create: string | Date,
     amount?: number,
-    status: string,
-    to?: string | boolean,
+    status: any,
+    to?: any,
     estPickup?: string | Date,
     items?: string | number,
     selected?: boolean,
@@ -25,7 +26,7 @@ type FromMeItemProps = {
     onSelect?: () => any,
     colorCode: string
 }
-export function FromMeItem(props: FromMeItemProps) {
+export function FromMeItem(props: any) {
     return (
         <Paper elevation={2} style={{ margin: "2%", backgroundColor: Colors.THEME_PRIMARY }} onClick={props.onCLick}>
             <Box display="flex" flexDirection="row" alignItems="center" style={{ padding: "2%" }}>
@@ -56,7 +57,7 @@ export function FromMeItem(props: FromMeItemProps) {
 }
 
 
-export function OrderItem(props: FromMeItemProps) {
+export function OrderItem(props: any) {
     return (
         <div style={{ flexDirection: 'row', display: 'flex', alignItems: "center" }}>
             <Checkbox
@@ -121,7 +122,7 @@ export type UserDetailsBoxProps = {
     text3?: string | number,
     text4?: string | number,
 }
-export function UserDetailsBox(Props: UserDetailsBoxProps) {
+export function UserDetailsBox(Props: any) {
     return (
         <CustomizedPaper>
             <Box display="flex" alignItems="center" flexDirection="row" style={{ padding: 10 }}>
@@ -141,7 +142,8 @@ export function UserDetailsBox(Props: UserDetailsBoxProps) {
     )
 }
 
-export function TypesContainer(props: FromMeList | OrdersProps) {
+export function TypesContainer(props: any) {
+
     return (
         <Paper style={{ backgroundColor: Colors.THEME_PRIMARY }}>
             <Box display="flex" alignItems="center" flexDirection="row" style={{ marginTop: 30, padding: 10 }}>
@@ -151,11 +153,11 @@ export function TypesContainer(props: FromMeList | OrdersProps) {
                 </Box>
                 <Box display="flex" flexGrow={1} alignItems="center" flexDirection="column" style={{ padding: 10 }}>
                     <Typography>Service Type</Typography>
-                    <Typography style={{ fontWeight: "bold" }}>{props.service_type_id.name}</Typography>
+                    <Typography style={{ fontWeight: "bold" }}>{props.serviceType}</Typography>
                 </Box>
                 <Box display="flex" flexGrow={1} alignItems="center" flexDirection="column" style={{ padding: 10 }}>
                     <Typography>Payment Type</Typography>
-                    <Typography style={{ fontWeight: "bold" }}>{props.payment_type_id.name}</Typography>
+                    <Typography style={{ fontWeight: "bold" }}>{props.paymentType}</Typography>
                 </Box>
 
             </Box>
@@ -164,14 +166,7 @@ export function TypesContainer(props: FromMeList | OrdersProps) {
 }
 
 
-export function ChargesAndCODContainer(props: {
-    delivery_charges?: string | number,
-    cod_amount?: string | number,
-    other_cost?: string | number,
-    to_pay?: string | number,
-    extra?: boolean
-    payment_type_id?: { id: number, name: string },
-}) {
+export function ChargesAndCODContainer(props: any) {
     return (
         <Paper style={{ backgroundColor: Colors.THEME_PRIMARY }}>
             <Box display="flex" alignItems="center" flexDirection="row" style={{ marginTop: 30, padding: 10 }}>
@@ -206,7 +201,7 @@ export function ChargesAndCODContainer(props: {
 }
 
 
-export function QrCodeContainer(props: FromMeList | OrdersProps) {
+export function QrCodeContainer(props: any) {
     return (
         <Box display="flex" alignItems="center" flexDirection="row">
             <Box style={{ paddingTop: "2%" }}>
@@ -218,7 +213,7 @@ export function QrCodeContainer(props: FromMeList | OrdersProps) {
                 </Box>
                 {props.current_status &&
                     <Box>
-                        <Typography variant="h6" component="h6">{props.current_status.name.split('] ')[1]}</Typography>
+                        <Typography variant="h6" component="h6">{props.current_status[1].split('] ')[1]}</Typography>
                     </Box>
                 }
             </Box>
@@ -226,7 +221,7 @@ export function QrCodeContainer(props: FromMeList | OrdersProps) {
     )
 }
 
-export function GoodsContainer(props: { description?: string, weight?: string | number, remark?: string }) {
+export function GoodsContainer(props: any) {
     return (
         <CustomizedPaper>
             <Box display="flex" alignItems="center" flexDirection="row" style={{ padding: 10 }}>
@@ -249,7 +244,7 @@ export function GoodsContainer(props: { description?: string, weight?: string | 
     )
 }
 
-export function PickUpItem(props: FromMeItemProps) {
+export function PickUpItem(props: any) {
     const create = moment(props.create).add(6.5, "hours").format('DD-MM-YYYY hh:mm:ss')
     const estPickup = moment(props.estPickup).add(6.5, "hours").format('DD-MM-YYYY hh:mm:ss')
     return (
@@ -281,9 +276,9 @@ export function PickUpItem(props: FromMeItemProps) {
     )
 }
 
-export const TimeSeriesList = ({ log }: { log: Array<logs> }) => {
-    let ui: Array<JSX.Element> = []
-    log.map((row, index) => {
+export const TimeSeriesList = (props:any) => {
+    let ui: any = []
+    props.log.map((row : any, index : any) => {
         ui.push(
             <li key={index} >
                 <Typography>

@@ -26,12 +26,12 @@ const theme = createMuiTheme({
 )
 
 function App() {
-  
+
   if(process.env.NODE_ENV == "production"){
     console.log = function(){}
     console.warn= function(){}
   }
-  
+
     return (
       <MuiThemeProvider theme={theme}>
         <Root />

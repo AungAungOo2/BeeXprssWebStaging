@@ -211,19 +211,19 @@ export default function MiniDrawer() {
               </Box>
             }
             {
-              window.location.pathname == "/home/fromme/AWBDetails" &&
+              window.location.pathname == "/home/fromme/AwbDetails" &&
 
               <Box display="flex" flexDirection="row">
                 <MenuButton icon={IconKeys.proofOfDelivery} name="POD" onClick={() => {
                   if (localStorage.getItem("@receiver_type") == "false") alert("This AWB is not deliverd yet")
-                  if (localStorage.getItem("@receiver_type") == "true") history.push("/home/fromme/AWBDetails/proofOfDelievery")
+                  if (localStorage.getItem("@receiver_type") == "true") history.push("/home/fromme/AwbDetails/proofOfDelievery")
                 }} />
               </Box>
               // <IconButton
               //     color="inherit"
               //     onClick={()=>{
               //       if(localStorage.getItem("@receiver_type") == "false") alert("This AWB is not deliverd yet")
-              //       if(localStorage.getItem("@receiver_type") == "true") history.push("/home/fromme/AWBDetails/proofOfDelievery")
+              //       if(localStorage.getItem("@receiver_type") == "true") history.push("/home/fromme/AwbDetails/proofOfDelievery")
               //     }}
               //     edge="start">
               //     <Icons name={IconKeys.proofOfDelivery} />
@@ -349,7 +349,7 @@ export default function MiniDrawer() {
             </Route>
 
             {/* <Route path="/home/tome/excel" component={ToMeExcel} exact/>  */}
-            {/* <Route path="/home/tome/excel" exact> 
+            {/* <Route path="/home/tome/excel" exact>
                     <ToMeListProvider> <ToMeExcel /> </ToMeListProvider>
                   </Route> */}
 
@@ -376,7 +376,7 @@ export default function MiniDrawer() {
               </FromMeProvider>
             )} />
 
-            <Route path="/home/fromme/AWBDetails" exact render={(props) => (
+            <Route path="/home/fromme/AwbDetails" exact render={(props) => (
               <FromMeProvider>
                 <AWBDetails {...props} />
               </FromMeProvider>
@@ -394,7 +394,7 @@ export default function MiniDrawer() {
               </FromMeProvider>
             )} />
 
-            <Route path="/home/fromme/AWBDetails/proofOfDelievery" exact render={(props) => (
+            <Route path="/home/fromme/AwbDetails/proofOfDelievery" exact render={(props) => (
               <FromMeProvider>
                 <ProofOfDelievery {...props} />
               </FromMeProvider>
