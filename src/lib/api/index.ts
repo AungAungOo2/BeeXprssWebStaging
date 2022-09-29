@@ -156,7 +156,7 @@ export async function fromMeDetail(id:number) {
     }
 }
 
-export async function fromMeFilter(data: any): Promise<SearchResponse> {
+export async function fromMeFilter(data: any) {
     try {
         const response = await API1.post(AWB_FILTER_URL, data)
         return response.data.result

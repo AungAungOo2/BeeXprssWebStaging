@@ -146,7 +146,7 @@ export function AWBList() {
 
     const RenderItemList = () => {
         let list: Array<JSX.Element> = []
-        let data =  items
+        let data = filterMood ? filterItems : items
         let firstTime = filterMood ? filterOneTimeCall : oneTimeCall
         data.map((row, index) => {
             list.push(
@@ -183,13 +183,10 @@ export function AWBList() {
         await setProgressPercent(0)
 
         var list : ChipObject[] = []
-        if (filterObject?.date_from != "" && filterObject?.date_to != "") list.push({ key: "date", value: filterObject?.date_from + " to " + filterObject?.date_to })
+        if (filterObject?.date_from) list.push({ key: "date", value: filterObject?.date_from})
 
-        if (filterObject?.receiver && type == "name" && filterObject?.receiver_name != "") list.push({ key: "type", value: filterObject?.receiver_name })
         else if (filterObject?.receiver && type == "awb" && filterObject?.awb_no != "") list.push({ key: "type", value: filterObject?.awb_no })
-        else if (filterObject?.receiver && type == "phone" && filterObject?.receiver_phone != "") list.push({ key: "type", value: filterObject?.receiver_phone })
-        else if (filterObject?.receiver && type == "city" && filterObject?.city.name != "") list.push({ key: "type", value: filterObject?.city.name || ""})
-        else if (filterObject?.receiver && type == "township" && filterObject?.township.name != "") list.push({ key: "type", value: filterObject?.township.name || ""})
+
 
         if (filterObject?.status) list.push({ key: "delivered", value: filterObject?.delivered ? "Delivered" : "Not Delivered" })
         if (filterObject?.cod) list.push({ key: "cod", value: filterObject?.received ?  "Received" : "Not Received" })
@@ -245,14 +242,12 @@ export function AWBList() {
     }
 
     const getRequestData = (data : any, page : number) => {
+        alert("This is"+data.awb_no)
         return {
-            ...data,
-            ...{
-                login: "09784605536",
-                password: "250911",
-                awb_no: "1740188OIC",
-                awb_create_date: "2022-08-30"
-            }
+            login: "09784605536",
+            password: "250911",
+            awb_no: data.awb_no,
+            awb_create_date: data.date_from
         }
     }
 
@@ -335,19 +330,19 @@ export function AWBList() {
                 onFilter = { () => _onFilter(filterObject)}/>
 
 
-            <AwbsFilterBar
-                sheetName={"FromMe"}
-                renderChipList={() => renderChipList()}
-                filterMood={filterMood}
-                count={printItems.length}
-                progress={progress}
-                progressPercent={progressPercent}
-                totalCount={filterItemTotalCount}
-                excelFormator={excelFormator}
-                getAllItems={() => apiGetAllFilter(0)}
-                clearFilter={() => clearFilter()}
-                onOpenDialog={() => _onOpenDialog()}
-                loading={loading} />
+            {/*<AwbsFilterBar*/}
+            {/*    sheetName={"FromMe"}*/}
+            {/*    renderChipList={() => renderChipList()}*/}
+            {/*    filterMood={filterMood}*/}
+            {/*    count={printItems.length}*/}
+            {/*    progress={progress}*/}
+            {/*    progressPercent={progressPercent}*/}
+            {/*    totalCount={filterItemTotalCount}*/}
+            {/*    excelFormator={excelFormator}*/}
+            {/*    getAllItems={() => apiGetAllFilter(0)}*/}
+            {/*    clearFilter={() => clearFilter()}*/}
+            {/*    onOpenDialog={() => _onOpenDialog()}*/}
+            {/*    loading={loading} />*/}
 
             {progress && <Box display="flex" alignItems="center">
                 <Box width="100%" mr={1}>

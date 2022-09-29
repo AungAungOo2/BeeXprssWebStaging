@@ -11,7 +11,7 @@ type ItemProps = {
     text?:string,
     colorCode: string
 }
-export function HistoryItem(props:ItemProps) {
+export function HistoryItem(props:any) {
     return (
         <Paper elevation={2} style={{margin:"2%",backgroundColor:Colors.THEME_PRIMARY}}>
             <Box display="flex" flexDirection="row" alignItems="center" style={{padding:"2%"}}>
@@ -22,8 +22,8 @@ export function HistoryItem(props:ItemProps) {
                             <Typography>{moment(props.create).add(6.5,'hours').format('DD-MMM-YY hh:mm A')}</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography 
-                                align={"right"} 
+                            <Typography
+                                align={"right"}
                                 style={{color:getStatusColor(props.colorCode)}}>
                                     {props.status}
                             </Typography>

@@ -26,27 +26,27 @@ export function FroMeHistoryList(){
             return Promise.reject()
         }
     }
-    const createText = (item:FromMeList):string =>{
+    const createText = (item:any):string =>{
         var amount = 0
-        switch(item.payment_type_id.name) { 
-            case "Sender Pay": { 
+        switch(item.payment_type_id[1]) {
+            case "Sender Pay": {
                 amount = item.cod_amount
-               break; 
-            } 
-            case "Receiver Pay": { 
-                amount = item.cod_amount 
-               break; 
-            } 
-            case "Special Service": { 
+               break;
+            }
+            case "Receiver Pay": {
+                amount = item.cod_amount
+               break;
+            }
+            case "Special Service": {
                 amount = item.cod_amount - ( item.delivery_charges + item.other_cost )
-                break; 
-             } 
-            default: { 
+                break;
+             }
+            default: {
                 amount = item.cod_amount
-               break; 
-            } 
-         } 
-        return item.current_status.name.split('] ')[1] == "Delivered" ? "Received " + amount +" MMK for "+item.name+"." : "To receive " + amount+" MMK for "+item.name+"."
+               break;
+            }
+         }
+        return item.current_status[1].split('] ')[1] == "Delivered" ? "Received " + amount +" MMK for "+item.name+"." : "To receive " + amount+" MMK for "+item.name+"."
     }
 
     const RenderItemList = () =>{
@@ -54,10 +54,10 @@ export function FroMeHistoryList(){
         items.map((row,index)=>{
             list.push(
                 <HistoryItem
-                    colorCode={row.current_status.name.split("]")[0].replace("[","").trim()}
+                    colorCode={row.current_status[1].split("]")[0].replace("[","").trim()}
                     key={index}
-                    create={row.log[0].updated_on}
-                    status={row.current_status.name.split(']')[1]}
+                    // create={row.log[0].updated_on}
+                    status={row.current_status[1].split(']')[1]}
                     text={createText(row)}
                 />
             )
@@ -77,5 +77,5 @@ export function FroMeHistoryList(){
             {RenderItemList()}
         </ScrollListener>
     )
-    
+
 }

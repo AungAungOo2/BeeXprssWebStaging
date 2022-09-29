@@ -74,7 +74,6 @@ export function AwbsFilter(props:params) {
                         {/*</Box>*/}
                     </Box>
                     <TextField onChange={(e) => props.onChangeTypeValue(e)} margin="dense" label="AWB Number" fullWidth value={props.valueType} />
-
                     {/*<div style={{ backgroundColor: "#F4F3F3", height: 0.5, marginTop: 10, marginBottom: 10 }} />*/}
 
                     {/*<div>*/}
@@ -86,20 +85,11 @@ export function AwbsFilter(props:params) {
                     {/*{ props.filterReceiver &&*/}
                     {/*    <div>*/}
                     {/*        <Select labelId="demo-controlled-open-select-label" id="demo-controlled-open-select" value={props.type} onChange={ e => props.onChangeType(e) } style={{ width: '100%' }}>*/}
-                    {/*            <MenuItem value={"name"}> Name </MenuItem>*/}
                     {/*            <MenuItem value={"awb"}> AWB Number </MenuItem>*/}
-                    {/*            <MenuItem value={"phone"}>Phone</MenuItem>*/}
-                    {/*            <MenuItem value={"city"}>City</MenuItem>*/}
-                    {/*            <MenuItem value={"township"}>Township</MenuItem>*/}
                     {/*        </Select>*/}
                     {/*        {props.type != 'city' && props.type != 'township' && <TextField onChange={(e) => props.onChangeTypeValue(e)} margin="dense" label="Enter here" fullWidth value={props.valueType} />}*/}
-                    {/*        {props.type == 'city' && <CustomizedAutoCompleteBox options={getCity()} getOptionLabel={(option: cityProps) => option.name} label="Select City" onChange={(e, value) => props.onChangeCity(e, value)} />}*/}
-                    {/*        {props.type == 'township' && <CustomizedAutoCompleteBox options={getTownship()} getOptionLabel={(option: townshipProps) => option.name} label="Select Township" onChange={(e, value) =>{console.log("value ", value) */}
-                    {/*        props.onChangeTownship(e, value)} } />}*/}
                     {/*    </div>*/}
                     {/*}*/}
-
-                    <div style={{ backgroundColor: "#F4F3F3", height: 0.5, marginTop: 10, marginBottom: 10 }} />
 
                     {/*<div style={{ flexDirection: 'row', display: "flex", marginTop: 8 }}>*/}
                     {/*    <FormControlLabel*/}
@@ -133,8 +123,6 @@ export function AwbsFilter(props:params) {
                     {/*        </Box>*/}
                     {/*    </div>}*/}
                     {/*</div>*/}
-
-                    <div style={{ backgroundColor: "#F4F3F3", height: 0.5, marginTop: 10, marginBottom: 10 }} />
 
                     {/*{ props.searchType == "fromme" && <div style={{ flexDirection: 'row', display: "flex", marginTop: 8 }}>*/}
                     {/*    <FormControlLabel*/}
@@ -201,8 +189,6 @@ export function AwbsFilter(props:params) {
                     {/*            </Box>*/}
                     {/*        </div>}*/}
                     {/*    </div> }*/}
-
-                    <div style={{ backgroundColor: "#F4F3F3", height: 0.5, marginTop: 10, marginBottom: 8 }} />
 
                 </DialogContent>
 

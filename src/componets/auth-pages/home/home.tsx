@@ -171,7 +171,7 @@ export function Home(){
                         <Grid container>
                             <Grid item xs={12}>
                                 <CustomizedPaper containerStyle={styles.dashboardSecondaryItemContainer} onCLick={()=>_onClick("wallet")}>
-                                    <HomeItems color={IconColor.THEME_PRIMARY} iconsName={IconKeys.wallet}  label="My Wallet" text="0"/>
+                                    <HomeItems color={IconColor.THEME_PRIMARY} iconsName={IconKeys.wallet}  label="100 Points" text="Silver"/>
                                 </CustomizedPaper>
                             </Grid>
                             <Grid item xs={12}>
@@ -184,7 +184,7 @@ export function Home(){
                                         loading ? (
                                             <h2 style={{color:IconColor.THEME_SECONDARY}}>Loading ...</h2>
                                         ) : (
-                                                <h2 style={{color:IconColor.THEME_SECONDARY}}>{dashboard? dashboard.from_me_count + " pcs" : ""}</h2>
+                                            <h2 style={{color:IconColor.THEME_SECONDARY}}>{dashboard? dashboard.from_me_count + " pcs" : ""}</h2>
                                         )
                                     }
 
@@ -239,7 +239,7 @@ export function Home(){
                         <Grid container>
                             <Grid item xs={11}>
                                 <CustomizedPaper containerStyle={styles.dashboardSecondaryItemContainer} onCLick={()=>_onClick("points")}>
-                                    <HomeItems color={IconColor.THEME_PRIMARY} iconsName={IconKeys.myPoints}  label="My Points" text="0"/>
+                                    <HomeItems color={IconColor.THEME_PRIMARY} iconsName={IconKeys.myPoints}  label="Redeems Rewards" text="3"/>
                                 </CustomizedPaper>
                             </Grid>
                             <Grid item xs={11}>

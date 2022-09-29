@@ -33,7 +33,7 @@ class Auth{
 
     private generateAuthkey = () =>{
         const browserInfo = Bowser.parse(window.navigator.userAgent)
-        
+
         let key:any = `
                         ${ browserInfo.browser.name} 
                         ${browserInfo.os.name} 
@@ -49,7 +49,7 @@ class Auth{
     login = async (userData:any,cb:Function) =>{
         const text = JSON.stringify(userData)
         const result = CryptoJS.AES.encrypt(text,this.generateAuthkey()) || ""
-        
+
         localStorage.setItem(this.authKey,String(result))
         this.authenticate = true
         cb(this.authenticate)
@@ -67,7 +67,7 @@ class Auth{
             this.authenticate = false
             return this.authenticate
         }
-        const result = CryptoJS.AES.decrypt(encodeData,this.generateAuthkey()).toString(CryptoJS.enc.Utf8)
+        const result = CryptoJS.AES.decrypt(encodeData.toString(),this.generateAuthkey()).toString(CryptoJS.enc.Utf8)
         if (result) this.authenticate = true
         if (!result) this.authenticate = false
         return this.authenticate
@@ -76,7 +76,7 @@ class Auth{
     getUserData = ():AuthContext|any =>{
         const encodeData = localStorage.getItem(this.authKey)||""
         if(!encodeData) return {}
-        const result = CryptoJS.AES.decrypt(encodeData,this.generateAuthkey()).toString(CryptoJS.enc.Utf8)
+        const result = CryptoJS.AES.decrypt(encodeData.toString(),this.generateAuthkey()).toString(CryptoJS.enc.Utf8)
         if(!result) return  {}
         const data:AuthContext = JSON.parse(result)
         this.username = data.login
@@ -93,10 +93,10 @@ class Auth{
     }
 
 
-    private decrypt = ():AuthContext =>{
+    private decrypt = ():AuthContext|any =>{
         const encodeData = localStorage.getItem(this.authKey)||""
         if(!encodeData) return {}
-        const result = CryptoJS.AES.decrypt(encodeData,this.generateAuthkey()).toString(CryptoJS.enc.Utf8)
+        const result = CryptoJS.AES.decrypt(encodeData.toString(),this.generateAuthkey()).toString(CryptoJS.enc.Utf8)
         if(!result) return  {}
         const data:AuthContext = JSON.parse(result)
         return data

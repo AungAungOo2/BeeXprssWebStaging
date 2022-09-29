@@ -334,19 +334,19 @@ export function Tome() {
                 onFilter = { () => _onFilter(filterObject)}/>
 
             <LeftContainer>
-                <AwbsFilterBar
-                    sheetName={"ToMe"}
-                    renderChipList = { () => renderChipList()}
-                    filterMood = {filterMood}
-                    count= {printItems.length}
-                    progress={progress}
-                    progressPercent={progressPercent}
-                    totalCount={filterItemTotalCount}
-                    excelFormator={ excelFormator }
-                    getAllItems={ () => apiGetAllFilter(0)}
-                    clearFilter={ () => clearFilter()}
-                    onOpenDialog={ () => _onOpenDialog()}
-                    loading = {loading}/>
+                {/*<AwbsFilterBar*/}
+                {/*    sheetName={"ToMe"}*/}
+                {/*    renderChipList = { () => renderChipList()}*/}
+                {/*    filterMood = {filterMood}*/}
+                {/*    count= {printItems.length}*/}
+                {/*    progress={progress}*/}
+                {/*    progressPercent={progressPercent}*/}
+                {/*    totalCount={filterItemTotalCount}*/}
+                {/*    excelFormator={ excelFormator }*/}
+                {/*    getAllItems={ () => apiGetAllFilter(0)}*/}
+                {/*    clearFilter={ () => clearFilter()}*/}
+                {/*    onOpenDialog={ () => _onOpenDialog()}*/}
+                {/*    loading = {loading}/>*/}
 
             { progress && <Box display="flex" alignItems="center">
                 <Box width="100%" mr={1}>

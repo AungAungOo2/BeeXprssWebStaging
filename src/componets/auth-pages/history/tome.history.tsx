@@ -12,7 +12,7 @@ import { ScrollListener } from '../../listener/ScrollListen'
 export function ToMeHistoryList(){
 
     const [oneTimeCall,setOneTimeCall] = React.useState(false)
-    const [items,setItems] = React.useState<Array<ToMeList>>([])
+    const [items,setItems] = React.useState<Array<any>>([])
 
 
     const apiCall = async (page = 0) =>{
@@ -31,39 +31,39 @@ export function ToMeHistoryList(){
         }
     }
 
-    const createText = (item:ToMeList):string => {
+    const createText = (item:any):string => {
         var amount = 0
-        switch(item.payment_type_id.name) { 
-            case "Sender Pay": { 
+        switch(item.payment_type_id[1]) {
+            case "Sender Pay": {
                 amount = item.cod_amount
-               break; 
-            } 
-            case "Receiver Pay": { 
+               break;
+            }
+            case "Receiver Pay": {
                 amount = item.cod_amount + item.delivery_charges + item.other_cost
-               break; 
-            } 
-            case "Special Service": { 
+               break;
+            }
+            case "Special Service": {
                 amount = item.cod_amount
-                break; 
-             } 
-            default: { 
+                break;
+             }
+            default: {
                 amount = item.cod_amount
-               break; 
-            } 
-         } 
-        return item.current_status.name.split('] ')[1] == "Delivered" ? "Paid " + amount +" MMK for "+item.name+"." : "To pay " + amount+" MMK for "+item.name+"."
+               break;
+            }
+         }
+        return item.current_status[1].split('] ')[1] == "Delivered" ? "Paid " + amount +" MMK for "+item.name+"." : "To pay " + amount+" MMK for "+item.name+"."
     }
 
     const RenderItemList = () =>{
         let list:Array<JSX.Element> =[]
         items.map((row,index)=>{
             list.push(
-                <HistoryItem 
+                <HistoryItem
                     key={index}
-                    create={row.log[0].updated_on}
-                    status={row.current_status.name.split(']')[1]}
+                    // create={row.log[0].updated_on}
+                    status={row.current_status[1].split(']')[1]}
                     text={createText(row)}
-                    colorCode={row.current_status.name.split("]")[0].replace("[","").trim()}
+                    colorCode={row.current_status[1].split("]")[0].replace("[","").trim()}
                 />
             )
         })
@@ -82,5 +82,5 @@ export function ToMeHistoryList(){
             {RenderItemList()}
         </ScrollListener>
     )
-    
+
 }
