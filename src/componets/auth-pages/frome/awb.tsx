@@ -84,21 +84,24 @@ export function AWBList() {
     }
 
     const apiFilterCall = async (data : FilterFromMeObject, page = 0) => {
-        try {
-            const results = await fromMeFilter(getRequestData(data, page))
-            if (results.awb_data.length > 0 ) {
-                setFilterItems( prev => ([...prev, ...results.awb_data]))
-                setFilterItemTotalCount(results.total_item)
-            }
-            return Promise.resolve(results.awb_data.length)
-        } catch (error) {
-            if(error == "Error: timeout of "+ API_TIMEOUT +"ms exceeded"){
-                alert("Exceeded timeout, Please try agian.")
-            }
-            return Promise.reject()
-        } finally {
-            setFilterOneTimeCall(true)
-        }
+        // try {
+        //     const results = await fromMeFilter(getRequestData(data, page))
+        //     if (results.awb_data.length > 0 ) {
+        //         setFilterItems( prev => ([...prev, ...results.awb_data]))
+        //         setFilterItemTotalCount(results.total_item)
+        //     }
+        //     return Promise.resolve(results.awb_data.length)
+        // } catch (error) {
+        //     if(error == "Error: timeout of "+ API_TIMEOUT +"ms exceeded"){
+        //         alert("Exceeded timeout, Please try agian.")
+        //     }
+        //     return Promise.reject()
+        // } finally {
+        //     setFilterOneTimeCall(true)
+        // }
+
+
+        alert("Hello filter function")
     }
 
     const apiGetAllFilter = async (page: number) => {
@@ -184,12 +187,13 @@ export function AWBList() {
 
         var list : ChipObject[] = []
         if (filterObject?.date_from) list.push({ key: "date", value: filterObject?.date_from})
+        if (filterObject?.date_to) list.push({ key: "date", value: filterObject?.date_to})
 
-        else if (filterObject?.receiver && type == "awb" && filterObject?.awb_no != "") list.push({ key: "type", value: filterObject?.awb_no })
+        // else if (filterObject?.receiver && type == "awb" && filterObject?.awb_no != "") list.push({ key: "type", value: filterObject?.awb_no })
 
 
-        if (filterObject?.status) list.push({ key: "delivered", value: filterObject?.delivered ? "Delivered" : "Not Delivered" })
-        if (filterObject?.cod) list.push({ key: "cod", value: filterObject?.received ?  "Received" : "Not Received" })
+        // if (filterObject?.status) list.push({ key: "delivered", value: filterObject?.delivered ? "Delivered" : "Not Delivered" })
+        // if (filterObject?.cod) list.push({ key: "cod", value: filterObject?.received ?  "Received" : "Not Received" })
 
         setChipList(list)
         apiFilterCall(filterObject)

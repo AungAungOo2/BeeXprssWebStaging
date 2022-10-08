@@ -21,6 +21,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { FaAlignCenter } from 'react-icons/fa';
 import {useState} from "react";
+import axios from "axios";
 
 const useStyles = makeStyles(() => ({
     marqueeContainer:{
@@ -133,6 +134,11 @@ export function Home(){
             setLoading(false)
         })
     },[])
+
+
+    const getPoint = async () => {
+
+    }
 
     return(
         <Box style={{marginBottom:50}}>
