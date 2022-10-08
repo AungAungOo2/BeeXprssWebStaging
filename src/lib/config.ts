@@ -3,6 +3,8 @@ export const API_TIMEOUT = 150000
 export const FILTER_PAGINATION_COUNT = 50
 // export const BASE_URL = "http://beexpr.staging.global-connect.asia/"
 export const BASE_URL = "http://odoo.beexprss.com/"
+//export const BASE_URL = "http://beexpr.staging.global-connect.asia/"
+//  export const BASE_URL = "http://odoo.beexprss.com/"
 export const SMS_URL = "https://api.kast.ph/"
 
 export const DATABASE_NAME = "BeeXprssJuly8"
