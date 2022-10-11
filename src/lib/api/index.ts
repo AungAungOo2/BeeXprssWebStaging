@@ -13,7 +13,6 @@ import {
     QUOTE_URL,
     FROM_ME_URL,
     TO_ME_URL,
-    FROM_ME_FILTER_URL,
     TO_ME_FILTER_URL,
     GET_CITY_TOWNSHIP_URL,
     GET_NAME_URL,
@@ -36,7 +35,7 @@ import {
     CALCULATE_DELIVERY_CHARGES_LIST,
     CREATE_DRAFT_AWB_LIST,
     API_TIMEOUT,
-    DETAIL_URL, GET_LOG_URL, AWB_FILTER_URL
+    DETAIL_URL, GET_LOG_URL, AWB_FILTER_URL, GET_POINT, GET_REDEEM_PRODUCTS, REDEEM_URL, REWARD_TAKEN_URL
 } from "../config";
 import { loginProps } from "../types/login.types";
 import { FilterResponse, ToMeList } from "../types/tome.types";
@@ -411,6 +410,48 @@ export async function createDraftAwbList(data: ExportOrderList[]) {
     } catch (error) {
         return Promise.reject(error)
     }
+}
+
+export async function getPoint() {
+    try {
+        const response = await API1.post(GET_POINT, {})
+        return response.data.result
+    } catch (error) {
+        return Promise.reject(error)
+    }
+}
+
+export async function getRedeemProducts() {
+    try {
+        const response = await API1.post(GET_REDEEM_PRODUCTS, {})
+        return response.data.result
+    } catch (error) {
+        return Promise.reject(error)
+    }
+}
+
+export async function RedeemSubmit(item_id:any) {
+        const response = await API1.post(REDEEM_URL, {
+            item_id:item_id,
+            state: "done"
+        })
+        if(response.data.error){
+            console.log("Hello")
+            return response.data.error.data.message
+        }else {
+            console.log("Hello2")
+            return response.data.result.message
+        }
+}
+
+export async function RewardTaken() {
+    try{
+        const response = await API1.post(REWARD_TAKEN_URL, {})
+        return response.data.result
+    }catch (error) {
+        return Promise.reject(error)
+    }
+
 }
 
 export async function getLog(name:any){
