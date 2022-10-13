@@ -84,21 +84,21 @@ export function AWBList() {
     }
 
     const apiFilterCall = async (data : FilterFromMeObject, page = 0) => {
-        // try {
-        //     const results = await fromMeFilter(getRequestData(data, page))
-        //     if (results.awb_data.length > 0 ) {
-        //         setFilterItems( prev => ([...prev, ...results.awb_data]))
-        //         setFilterItemTotalCount(results.total_item)
-        //     }
-        //     return Promise.resolve(results.awb_data.length)
-        // } catch (error) {
-        //     if(error == "Error: timeout of "+ API_TIMEOUT +"ms exceeded"){
-        //         alert("Exceeded timeout, Please try agian.")
-        //     }
-        //     return Promise.reject()
-        // } finally {
-        //     setFilterOneTimeCall(true)
-        // }
+        try {
+            const results = await fromMeFilter(getRequestData(data, page))
+            if (results.awb_data.length > 0 ) {
+                setFilterItems( prev => ([...prev, ...results.awb_data]))
+                setFilterItemTotalCount(results.total_item)
+            }
+            return Promise.resolve(results.awb_data.length)
+        } catch (error) {
+            if(error == "Error: timeout of "+ API_TIMEOUT +"ms exceeded"){
+                alert("Exceeded timeout, Please try agian.")
+            }
+            return Promise.reject()
+        } finally {
+            setFilterOneTimeCall(true)
+        }
 
 
         alert("Hello filter function")
@@ -143,13 +143,14 @@ export function AWBList() {
             console.log("Filter is not mood")
         }
         dispatch({ FromMeList: param })
-        history.push(`/home/fromme/AWBDetails/`)
+        history.push(`/home/fromme/AwbDetails`)
         console.log("This is params",param.id)
     }
 
     const RenderItemList = () => {
         let list: Array<JSX.Element> = []
         let data = filterMood ? filterItems : items
+        console.log("this is filterItems ",filterItems)
         let firstTime = filterMood ? filterOneTimeCall : oneTimeCall
         data.map((row, index) => {
             list.push(
@@ -158,11 +159,11 @@ export function AWBList() {
                     id={row.name}
                     amount={row.cash_by_last_mile}
                     create={row.awb_created_date}
-                    to={row.receiver_id[1].split(']')[1]}
+                    to={filterMood ? row.receiver_id.name : row.receiver_id[1].split(']')[1]}
                     no={index + 1}
-                    status={row.current_status[1].split("]")[1]}
+                    status={filterMood ? row.current_status.name.split("]")[1] : row.current_status[1].split("]")[1]}
                     onCLick={() => onClick(row)}
-                    colorCode={row.current_status[1].split("]")[0].replace("[", "").trim()}
+                    colorCode={filterMood ? row.current_status.name.split("]")[0].replace("[", "").trim() : row.current_status[1].split("]")[0].replace("[", "").trim()}
                 />
             )
         })
@@ -189,11 +190,11 @@ export function AWBList() {
         if (filterObject?.date_from) list.push({ key: "date", value: filterObject?.date_from})
         if (filterObject?.date_to) list.push({ key: "date", value: filterObject?.date_to})
 
-        // else if (filterObject?.receiver && type == "awb" && filterObject?.awb_no != "") list.push({ key: "type", value: filterObject?.awb_no })
+        else if (filterObject?.receiver && type == "awb" && filterObject?.awb_no != "") list.push({ key: "type", value: filterObject?.awb_no })
 
 
-        // if (filterObject?.status) list.push({ key: "delivered", value: filterObject?.delivered ? "Delivered" : "Not Delivered" })
-        // if (filterObject?.cod) list.push({ key: "cod", value: filterObject?.received ?  "Received" : "Not Received" })
+        if (filterObject?.status) list.push({ key: "delivered", value: filterObject?.delivered ? "Delivered" : "Not Delivered" })
+        if (filterObject?.cod) list.push({ key: "cod", value: filterObject?.received ?  "Received" : "Not Received" })
 
         setChipList(list)
         apiFilterCall(filterObject)
@@ -248,10 +249,25 @@ export function AWBList() {
     const getRequestData = (data : any, page : number) => {
         alert("This is"+data.awb_no)
         return {
-            login: "09784605536",
-            password: "250911",
-            awb_no: data.awb_no,
-            awb_create_date: data.date_from
+            // login: "09784605536",
+            // password: "250911",
+            // awb_no: data.awb_no,
+            // awb_create_date: data.date_from,
+            // "receiver": data.receiver ? "True" : "False",
+            // "status": data.status ? "True" : "False",
+            // "cod": data.cod ? "True" : "False",
+            // "delivered": data.delivered ? "True" : "False",
+            // "received": data.received ? "True" : "False",
+            // "page": page
+            ...data,
+            ...{
+                "receiver": data.receiver ? "True" : "False",
+                "status": data.status ? "True" : "False",
+                "cod": data.cod ? "True" : "False",
+                "delivered": data.delivered ? "True" : "False",
+                "received": data.received ? "True" : "False",
+                "page": page
+            }
         }
     }
 
@@ -334,19 +350,19 @@ export function AWBList() {
                 onFilter = { () => _onFilter(filterObject)}/>
 
 
-            {/*<AwbsFilterBar*/}
-            {/*    sheetName={"FromMe"}*/}
-            {/*    renderChipList={() => renderChipList()}*/}
-            {/*    filterMood={filterMood}*/}
-            {/*    count={printItems.length}*/}
-            {/*    progress={progress}*/}
-            {/*    progressPercent={progressPercent}*/}
-            {/*    totalCount={filterItemTotalCount}*/}
-            {/*    excelFormator={excelFormator}*/}
-            {/*    getAllItems={() => apiGetAllFilter(0)}*/}
-            {/*    clearFilter={() => clearFilter()}*/}
-            {/*    onOpenDialog={() => _onOpenDialog()}*/}
-            {/*    loading={loading} />*/}
+            <AwbsFilterBar
+                sheetName={"FromMe"}
+                renderChipList={() => renderChipList()}
+                filterMood={filterMood}
+                count={printItems.length}
+                progress={progress}
+                progressPercent={progressPercent}
+                totalCount={filterItemTotalCount}
+                excelFormator={excelFormator}
+                getAllItems={() => apiGetAllFilter(0)}
+                clearFilter={() => clearFilter()}
+                onOpenDialog={() => _onOpenDialog()}
+                loading={loading} />
 
             {progress && <Box display="flex" alignItems="center">
                 <Box width="100%" mr={1}>

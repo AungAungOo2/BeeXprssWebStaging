@@ -27,7 +27,7 @@ export type HomeItemsProps = {
 export const HomeItems = (props:HomeItemsProps) =>{
     const classes = useStyles()
     return (
-        <Box display="flex"  alignItems="center" flexDirection="row" style={{paddingLeft: 16, paddingBottom: 10}}>
+        <Box display="flex"  alignItems="center"  flexDirection="row" style={{paddingLeft: 16,height:'70px'}}>
             <Box display="flex" alignItems="center" flexDirection="column"  style={{padding: 10}}>
                 <Icons name={props.iconsName} size={25} color={props.color} />
             </Box>

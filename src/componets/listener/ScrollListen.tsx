@@ -60,6 +60,8 @@ export function ScrollListener(props: actinProps) {
     let [stop, setStop] = React.useState(false)
     let [loaderId, setLoaderId] = React.useState(0)
 
+    console.log("This is cb"+props.children?.length)
+
     const onBottom = () => {
         if (stop || loadingStatus) return
         setLoadingStatus(true)
@@ -82,7 +84,7 @@ export function ScrollListener(props: actinProps) {
             </Box>
         )
     }
-    
+
     if (props.children.length == 1) {
         if (props.children[0].type == "span") {
             return (

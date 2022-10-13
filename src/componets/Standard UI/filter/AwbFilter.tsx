@@ -1,3 +1,4 @@
+
 import * as React from 'react'
 import { Button, Box, Grid, Select, MenuItem, TextField, Checkbox, FormControlLabel, Radio, makeStyles, InputBase, createStyles, Theme } from "@material-ui/core"
 import { getCity, cityProps, getTownship, townshipProps } from '../../../lib/storage/CityAndTownship'
@@ -40,20 +41,20 @@ type params = {
     onChangefilterCash: (key : string, value : string) => void,
     onCloseDialog: Function,
     onFilter: Function,
-  }
+}
 export function AwbsFilter(props:params) {
     return (
         <div>
-            <Dialog  open={props.openFilter} aria-labelledby="form-dialog-title">
+            <Dialog open={props.openFilter} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title"> {props.title} </DialogTitle>
-                <DialogContent style={{width:'500px'}}>
+                <DialogContent>
 
                     <div style={{ backgroundColor: "#F4F3F3", height: 0.5, marginBottom: 10 }} />
                     <Box display="flex" flexDirection="row" alignItems="center" style={{ backgroundColor: "#F4F3F3", padding: 10 }}>
                         <Box flexGrow={1}>
                             <TextField
                                 id="date"
-                                label="Create Date"
+                                label="From Date"
                                 type="date"
                                 defaultValue={props.filterFromDate}
                                 InputLabelProps={{ shrink: true, }}
@@ -73,8 +74,135 @@ export function AwbsFilter(props:params) {
                             </form>
                         </Box>
                     </Box>
-                    <TextField onChange={(e) => props.onChangeTypeValue(e)} margin="dense" label="AWB Number" fullWidth value={props.valueType} />
+
                     <div style={{ backgroundColor: "#F4F3F3", height: 0.5, marginTop: 10, marginBottom: 10 }} />
+
+                    <div>
+                        <FormControlLabel
+                            control={<Checkbox checked={props.filterReceiver} onChange={ () => props.onChangefilterReceiver() } name="checkedA" />}
+                            label={props.information}
+                        />
+                    </div>
+                    { props.filterReceiver &&
+                    <div>
+                        <Select labelId="demo-controlled-open-select-label" id="demo-controlled-open-select" value={props.type} onChange={ e => props.onChangeType(e) } style={{ width: '100%' }}>
+                            <MenuItem value={"name"}> Name </MenuItem>
+                            <MenuItem value={"awb"}> AWB Number </MenuItem>
+                            <MenuItem value={"phone"}>Phone</MenuItem>
+                            <MenuItem value={"city"}>City</MenuItem>
+                            <MenuItem value={"township"}>Township</MenuItem>
+                        </Select>
+                        {props.type != 'city' && props.type != 'township' && <TextField onChange={(e) => props.onChangeTypeValue(e)} margin="dense" label="Enter here" fullWidth value={props.valueType} />}
+                        {props.type == 'city' && <CustomizedAutoCompleteBox options={getCity()} getOptionLabel={(option: cityProps) => option.name} label="Select City" onChange={(e, value) => props.onChangeCity(e, value)} />}
+                        {props.type == 'township' && <CustomizedAutoCompleteBox options={getTownship()} getOptionLabel={(option: townshipProps) => option.name} label="Select Township" onChange={(e, value) =>{console.log("value ", value)
+                            props.onChangeTownship(e, value)} } />}
+                    </div>
+                    }
+
+                    <div style={{ backgroundColor: "#F4F3F3", height: 0.5, marginTop: 10, marginBottom: 10 }} />
+
+                    <div style={{ flexDirection: 'row', display: "flex", marginTop: 8 }}>
+                        <FormControlLabel
+                            control={<Checkbox checked={props.filterStatus} onChange={ () => props.onChangefilterStatus()} name="checkedA" />}
+                            label="Delivery Status &nbsp;&nbsp;&nbsp;  "
+                        />
+                        {props.filterStatus && <div>
+                            <Box display="flex" flexDirection="row" alignItems="center" style={{ backgroundColor: "#F4F3F3", padding: 10 }}>
+                                <Box flexGrow={1}>
+                                    <FormControlLabel value="parcel" control={
+                                        <Radio
+                                            checked={props.filterDelivered}
+                                            onChange={() => props.onChangefilterDelivered("delivered", "Delivered")}
+                                            value="delivered"
+                                            name="radio-button-demo"
+                                            inputProps={{ 'aria-label': 'Delivered' }}
+                                        />
+                                    } label="Delivered" />
+                                </Box>
+                                <Box flexGrow={1}>
+                                    <FormControlLabel value="document" control={
+                                        <Radio
+                                            checked={!props.filterDelivered}
+                                            onChange={() => props.onChangefilterDelivered("delivered", "Not Delivered")}
+                                            value="notDelivered"
+                                            name="radio-button-demo"
+                                            inputProps={{ 'aria-label': 'Not Delivered' }}
+                                        />
+                                    } label="Not Delivered" />
+                                </Box>
+                            </Box>
+                        </div>}
+                    </div>
+
+                    <div style={{ backgroundColor: "#F4F3F3", height: 0.5, marginTop: 10, marginBottom: 10 }} />
+
+                    { props.searchType == "fromme" && <div style={{ flexDirection: 'row', display: "flex", marginTop: 8 }}>
+                        <FormControlLabel
+                            control={<Checkbox checked={props.filterCod} onChange={() => props.onChangefilterCod()} name="checkedA" />}
+                            label="Cash On Delivery"
+                        />
+                        {props.filterCod && <div>
+                            <Box display="flex" flexDirection="row" alignItems="center" style={{ backgroundColor: "#F4F3F3", padding: 10 }}>
+                                <Box flexGrow={1}>
+                                    <FormControlLabel value="parcel" control={
+                                        <Radio
+                                            checked={props.filterCash}
+                                            onChange={() => props.onChangefilterCash("received", "Received")}
+                                            value="received"
+                                            name="radio-button-demo"
+                                            inputProps={{ 'aria-label': 'Received' }}
+                                        />
+                                    } label="Received &nbsp; &nbsp; &nbsp; &nbsp; " />
+                                </Box>
+                                <Box flexGrow={1}>
+                                    <FormControlLabel value="document" control={
+                                        <Radio
+                                            checked={!props.filterCash}
+                                            onChange={() => props.onChangefilterCash("received", "Not Received")}
+                                            value="notReceived"
+                                            name="radio-button-demo"
+                                            inputProps={{ 'aria-label': 'Not Received' }}
+                                        />
+                                    } label="Not Received &nbsp; &nbsp; &nbsp; &nbsp; " />
+                                </Box>
+                            </Box>
+                        </div>}
+                    </div> }
+
+                    { props.searchType == "tome" && <div style={{ flexDirection: 'row', display: "flex", marginTop: 8 }}>
+                        <FormControlLabel
+                            control={<Checkbox checked={props.filterCod} onChange={props.onChangefilterCod} name="checkedA" />}
+                            label="Cash On Delivery"
+                        />
+                        {props.filterCod && <div>
+                            <Box display="flex" flexDirection="row" alignItems="center" style={{ backgroundColor: "#F4F3F3", padding: 10 }}>
+                                <Box flexGrow={1}>
+                                    <FormControlLabel value="parcel" control={
+                                        <Radio
+                                            checked={props.filterCash}
+                                            onChange={() => props.onChangefilterCash("paid", "Paid")}
+                                            value="paid"
+                                            name="radio-button-demo"
+                                            inputProps={{ 'aria-label': 'Paid' }}
+                                        />
+                                    } label="Paid &nbsp; &nbsp; &nbsp; &nbsp; " />
+                                </Box>
+                                <Box flexGrow={1}>
+                                    <FormControlLabel value="document" control={
+                                        <Radio
+                                            checked={!props.filterCash}
+                                            onChange={() => props.onChangefilterCash("paid", "Not Paid")}
+                                            value="notPaid"
+                                            name="radio-button-demo"
+                                            inputProps={{ 'aria-label': 'Not Paid' }}
+                                        />
+                                    } label="Not Paid &nbsp; &nbsp; &nbsp; &nbsp; " />
+                                </Box>
+                            </Box>
+                        </div>}
+                    </div> }
+
+                    <div style={{ backgroundColor: "#F4F3F3", height: 0.5, marginTop: 10, marginBottom: 8 }} />
 
                 </DialogContent>
 
@@ -150,9 +278,9 @@ export function AwbsFilterBar(props: filterBar) {
                 </Excel> }
 
                 { props.filterMood && props.progressPercent < 100 &&  props.totalCount > 0 &&
-                    <Button disabled={props.progress} onClick={ () => props.getAllItems()} style={{textTransform: 'none'}} variant="contained" color="primary">
-                        Export ({props.totalCount} records)
-                    </Button> }
+                <Button disabled={props.progress} onClick={ () => props.getAllItems()} style={{textTransform: 'none'}} variant="contained" color="primary">
+                    Export ({props.totalCount} records)
+                </Button> }
 
                 { props.filterMood && <IconButton
                     style={{ padding: 0 }}
@@ -166,5 +294,3 @@ export function AwbsFilterBar(props: filterBar) {
         </Grid>
     );
 }
-
-

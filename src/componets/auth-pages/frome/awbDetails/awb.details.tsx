@@ -54,7 +54,7 @@ export function AWBDetails(message?: any){
     }
 
     if(!state||!state.FromMeList||!state.FromMeList.id) return <div />
-    localStorage.setItem("@receiver_type",state.FromMeList.current_status.name == "[DLVD] Delivered" ? "true" : "false"  )
+    localStorage.setItem("@receiver_type",state.FromMeList.current_status[1] == "[DLVD] Delivered" ? "true" : "false"  )
     const {FromMeList} = state
 
     const handleOpen = () => {
@@ -80,7 +80,7 @@ export function AWBDetails(message?: any){
                     <>
                         <LeftContainer>
                             <QrCodeContainer {...items} />
-                            <CustomizedButton buttonColor={Colors.THEME_PRIMARY_DARK} icon={IconKeys.log} label="Show Log" onClick={()=>{handleOpen()}}/>
+                            <CustomizedButton buttonColor={Colors.THEME_PRIMARY_DARK} icon={IconKeys.log} label="Show Tracking" onClick={()=>{handleOpen()}}/>
                             <Modal
                                 open={open}
                                 onClose={handleClose}

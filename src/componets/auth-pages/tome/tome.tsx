@@ -154,11 +154,11 @@ export function Tome() {
                     id={row.name}
                     amount={row.cash_by_last_mile}
                     create={row.awb_created_date}
-                    from={row.sender_id[1].split(']')[1]}
+                    from={filterMood ? row.sender_id.name : row.sender_id[1].split(']')[1]}
                     no={index + 1}
-                    status={row.current_status[1].split("]")[1]}
+                    status={filterMood ? row.current_status.name.split("]")[1] : row.current_status[1].split("]")[1]}
                     onClick={() => onClick(row)}
-                    colorCode={row.current_status[1].split("]")[0].replace("[", "").trim()}
+                    colorCode={filterMood ? row.current_status.name.split("]")[0].replace("[", "").trim() : row.current_status[1].split("]")[0].replace("[", "").trim()}
                 />
             )
         })
@@ -334,19 +334,19 @@ export function Tome() {
                 onFilter = { () => _onFilter(filterObject)}/>
 
             <LeftContainer>
-                {/*<AwbsFilterBar*/}
-                {/*    sheetName={"ToMe"}*/}
-                {/*    renderChipList = { () => renderChipList()}*/}
-                {/*    filterMood = {filterMood}*/}
-                {/*    count= {printItems.length}*/}
-                {/*    progress={progress}*/}
-                {/*    progressPercent={progressPercent}*/}
-                {/*    totalCount={filterItemTotalCount}*/}
-                {/*    excelFormator={ excelFormator }*/}
-                {/*    getAllItems={ () => apiGetAllFilter(0)}*/}
-                {/*    clearFilter={ () => clearFilter()}*/}
-                {/*    onOpenDialog={ () => _onOpenDialog()}*/}
-                {/*    loading = {loading}/>*/}
+                <AwbsFilterBar
+                    sheetName={"ToMe"}
+                    renderChipList = { () => renderChipList()}
+                    filterMood = {filterMood}
+                    count= {printItems.length}
+                    progress={progress}
+                    progressPercent={progressPercent}
+                    totalCount={filterItemTotalCount}
+                    excelFormator={ excelFormator }
+                    getAllItems={ () => apiGetAllFilter(0)}
+                    clearFilter={ () => clearFilter()}
+                    onOpenDialog={ () => _onOpenDialog()}
+                    loading = {loading}/>
 
             { progress && <Box display="flex" alignItems="center">
                 <Box width="100%" mr={1}>

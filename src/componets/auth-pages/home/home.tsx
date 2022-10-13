@@ -13,6 +13,7 @@ import {
 
 import {COLORS, Colors, IconColor} from '../../res/color';
 import {
+    createDraftAwbList,
     getPoint,
     getPromotionData,
     getRecordCount,
@@ -120,7 +121,7 @@ export function Home() {
                 break;
             }
             case "pickUp": {
-                history.push("/home/fromme/")
+                history.push("/home/fromme")
                 break;
             }
             case "checkPrice": {
@@ -188,14 +189,14 @@ export function Home() {
         })
     }
 
-    const getRewardTaken = () => {
+    const getRewardTaken =async () => {
         setOpenDialog(true)
         setRedeemProductLoading(true)
-        RewardTaken().then((data) => {
-            setRewardTakenList(data)
-            setRedeemProductLoading(false)
+        RewardTaken().then(async (data) => {
+           await setRewardTakenList(data)
+           await setRedeemProductLoading(false)
         }).catch(() => {
-            setRedeemProductLoading(false)
+           setRedeemProductLoading(false)
         })
     }
 
@@ -226,7 +227,9 @@ export function Home() {
     }
 
     const chooseRewardTaken = async () => {
+        setRewardTakenList([])
         console.log("RewardTaken")
+        console.log("Length is "+rewardTakenList.length)
         setSelectedRedeemItem(false)
         setSelectedRewardTaken(true)
         await getRewardTaken()
@@ -334,7 +337,7 @@ export function Home() {
                                                                                         style={{backgroundColor: COLORS.SECONDARY}}
                                                                                         color="secondary">
                                                                                     {
-                                                                                        (redeemLoading && selectedId === index + 1) ? (
+                                                                                        (redeemLoading && index === index) ? (
                                                                                             <>
                                                                                                 <div style={{
                                                                                                     display: "flex",
@@ -376,7 +379,7 @@ export function Home() {
                                             ) : (
                                                 <>
                                                     {
-                                                        rewardTakenList ? (
+                                                        rewardTakenList.length > 0 ? (
                                                             <>
                                                                 {
                                                                     rewardTakenList.map((data: any) => {
@@ -555,7 +558,7 @@ export function Home() {
                             <Grid item xs={11}>
                                 <CustomizedPaper containerStyle={styles.dashboardSecondaryItemContainer}
                                                  onCLick={() => getRedeemProduct()}>
-                                    <HomeItems color={IconColor.THEME_PRIMARY} iconsName={IconKeys.myPoints} label=" "
+                                    <HomeItems color={IconColor.THEME_PRIMARY} iconsName={IconKeys.myPoints} label=""
                                                text="Redeems Rewards"/>
                                 </CustomizedPaper>
                             </Grid>

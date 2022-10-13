@@ -127,7 +127,7 @@ export function TomeDetails(){
                                 </div>
                             </Modal>
                             {QrCodeContainer(items)}
-                            <CustomizedButton buttonColor={Colors.THEME_PRIMARY_DARK} icon={IconKeys.log} label="Show Log" onClick={()=>{handleOpen()}}/>
+                            <CustomizedButton buttonColor={Colors.THEME_PRIMARY_DARK} icon={IconKeys.log} label="Show Tracking" onClick={()=>{handleOpen()}}/>
                             {SenderContainer(items)}
                             {ReceiverContainer(items)}
                             {items.current_status[1].split('] ')[1] == "Out of Delivery" && CourierContainer(items)}
